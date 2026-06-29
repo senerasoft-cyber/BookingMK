@@ -1,0 +1,464 @@
+{
+  "app": {
+    "name": "Bukano"
+  },
+  "home": {
+    "title": "Bukano",
+    "subtitle": "Appointment booking for local businesses",
+    "backendStatus": "Backend status",
+    "login": "Log in",
+    "register": "Register your business"
+  },
+  "status": {
+    "ok": "Connected",
+    "checking": "Checking...",
+    "error": "Could not reach the backend"
+  },
+  "common": {
+    "next": "Continue",
+    "back": "Back",
+    "save": "Save",
+    "skipForNow": "Skip for now",
+    "loading": "Loading...",
+    "required": "Required",
+    "somethingWentWrong": "Something went wrong",
+    "remove": "Remove",
+    "and": "and"
+  },
+  "auth": {
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Get your business started on Bukano",
+      "email": "Email",
+      "password": "Password",
+      "businessName": "Business name",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Log in",
+      "passwordMinLength": "At least 8 characters",
+      "agreeToTermsPrefix": "By creating an account, you agree to our",
+      "termsLink": "Terms of Service",
+      "privacyLink": "Privacy Policy"
+    },
+    "login": {
+      "title": "Log in",
+      "subtitle": "Log in to manage your business",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Log in",
+      "forgotPassword": "Forgot your password?",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Register"
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "subtitle": "We'll email you a link to set a new one.",
+      "submit": "Send reset link",
+      "sent": "If that email exists, a reset link has been sent.",
+      "backToLogin": "Back to log in"
+    },
+    "resetPassword": {
+      "title": "Set a new password",
+      "subtitle": "Choose a new password for your account.",
+      "newPassword": "New password",
+      "submit": "Update password",
+      "missingToken": "This link is missing or invalid. Request a new one."
+    },
+    "errors": {
+      "invalidCredentials": "Incorrect email or password",
+      "locked": "Too many failed attempts. Try again in a few minutes."
+    }
+  },
+  "onboarding": {
+    "steps": {
+      "type": "Business type",
+      "services": "Services",
+      "hours": "Working hours",
+      "branding": "Branding",
+      "mode": "Booking mode",
+      "billing": "Plan",
+      "live": "Done"
+    },
+    "type": {
+      "title": "What kind of business do you run?",
+      "subtitle": "This sets your starting services and the look of your page."
+    },
+    "services": {
+      "title": "Your services",
+      "subtitle": "Edit the pre-filled services or add your own.",
+      "name": "Name",
+      "duration": "Duration (min)",
+      "price": "Price (MKD)",
+      "addService": "Add service",
+      "newServiceName": "New service"
+    },
+    "hours": {
+      "title": "Working hours",
+      "subtitle": "When are you available for appointments?",
+      "closed": "Closed",
+      "open": "Open",
+      "openTime": "Opens",
+      "closeTime": "Closes",
+      "slotLength": "Slot length (min)",
+      "weekdays": {
+        "0": "Monday",
+        "1": "Tuesday",
+        "2": "Wednesday",
+        "3": "Thursday",
+        "4": "Friday",
+        "5": "Saturday",
+        "6": "Sunday"
+      }
+    },
+    "branding": {
+      "title": "Branding",
+      "subtitle": "Pick an accent colour and a short tagline for your page.",
+      "accent": "Accent colour",
+      "tagline": "Tagline",
+      "taglinePlaceholder": "e.g. Your style, our passion",
+      "uploadsNote": "You can add a logo and cover photo later from the dashboard."
+    },
+    "mode": {
+      "title": "Booking mode",
+      "subtitle": "How should appointments be confirmed?",
+      "open": "Open",
+      "openDescription": "Every booking is confirmed instantly.",
+      "approvedClients": "Approved clients",
+      "approvedClientsDescription": "New clients wait for approval once, then book instantly.",
+      "approveEvery": "Approve every booking",
+      "approveEveryDescription": "You approve every appointment manually.",
+      "requireVerification": "Require code verification",
+      "requireVerificationHint": "Clients verify a one-time code sent to their email before booking.",
+      "collectPhone": "Also ask for a phone number",
+      "collectPhoneHint": "Stored for your reference only -- never used to send anything."
+    },
+    "billing": {
+      "title": "Choose your plan",
+      "subtitle": "Pick a plan to start taking real bookings — every plan requires payment, there's no free tier.",
+      "perMonth": "/mo",
+      "unlimitedStaff": "Unlimited staff",
+      "maxStaff": "Up to {{count}} staff member",
+      "maxStaff_other": "Up to {{count}} staff members",
+      "featureStats": "Stats dashboard",
+      "featureMarketingTools": "Marketing tools (vouchers & loyalty)",
+      "featureWhiteLabel": "Remove \"Powered by Bukano\" branding",
+      "subscribe": "Subscribe",
+      "current": "Current plan"
+    },
+    "live": {
+      "title": "You're live!",
+      "subtitle": "Your booking page is available at:",
+      "previewButton": "Preview page",
+      "doneButton": "Go to dashboard"
+    }
+  },
+  "vocab": {
+    "service": { "service": "service", "client": "client" },
+    "medical": { "service": "appointment", "client": "patient" },
+    "session": { "service": "session", "client": "client" }
+  },
+  "public": {
+    "notFound": "There's no business at this address.",
+    "poweredBy": "Powered by Bukano",
+    "website": "Website",
+    "nav": {
+      "book": "Book",
+      "pricing": "Services & Pricing",
+      "pricingPickStaff": "Pick a staff member below to see their prices.",
+      "staff": "Staff",
+      "about": "About",
+      "gallery": "Gallery"
+    },
+    "about": {
+      "address": "Address",
+      "contact": "Contact"
+    },
+    "manage": {
+      "title": "Your booking",
+      "notFound": "This link is invalid or has expired.",
+      "reschedule": "Reschedule",
+      "cancel": "Cancel booking",
+      "newTime": "New date and time",
+      "confirmReschedule": "Confirm new time",
+      "status": {
+        "pending": "Awaiting confirmation",
+        "confirmed": "Confirmed",
+        "cancelled": "Cancelled"
+      }
+    },
+    "steps": {
+      "service": "1. Choose a service",
+      "datetime": "2. Pick a time",
+      "details": "3. Your details",
+      "result": "4. Done"
+    },
+    "service": {
+      "title": "Choose a service",
+      "minutes": "min",
+      "next": "Continue",
+      "empty": "This business hasn't added any services yet."
+    },
+    "staff": {
+      "title": "Choose your specialist",
+      "select": "Select"
+    },
+    "datetime": {
+      "title": "Pick a day and time",
+      "noSlots": "No available slots on this day.",
+      "back": "Back"
+    },
+    "details": {
+      "title": "Your details",
+      "name": "Name",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "phone": "Phone",
+      "phonePlaceholder": "+389 70 123 456",
+      "submit": "Continue",
+      "back": "Back"
+    },
+    "verify": {
+      "title": "Verify your email",
+      "subtitle": "We sent a code to {{email}}.",
+      "code": "Verification code",
+      "submit": "Verify",
+      "devCodeHint": "Dev mode — code: {{code}}",
+      "resendCode": "Resend code",
+      "cantGetCode": "Can't get a code?",
+      "cantGetCodeAction": "Continue without verification",
+      "errors": {
+        "invalid_code": "Wrong code. Try again.",
+        "code_expired": "That code expired. Send a new one.",
+        "too_many_attempts": "Too many wrong attempts. Send a new code.",
+        "no_pending_code": "No active code. Send a new one.",
+        "rate_limited": "Too many requests. Wait a bit and try again.",
+        "daily_cap_reached": "Daily limit reached. Try again tomorrow.",
+        "captcha_failed": "The verification check failed. Try again.",
+        "generic": "Something went wrong. Try again."
+      }
+    },
+    "result": {
+      "confirmedTitle": "Booking confirmed!",
+      "confirmedBody": "We'll see you on {{date}} at {{time}}.",
+      "pendingTitle": "Request received",
+      "pendingBody": "The owner needs to approve your booking. You'll be contacted soon.",
+      "bookAnother": "Book another appointment"
+    }
+  },
+  "dashboard": {
+    "nav": {
+      "agenda": "Agenda",
+      "stats": "Stats",
+      "services": "Services",
+      "hours": "Hours",
+      "staff": "Staff",
+      "clients": "Clients",
+      "marketing": "Marketing",
+      "branding": "Branding",
+      "billing": "Billing",
+      "settings": "Settings",
+      "viewPublicPage": "View page",
+      "logout": "Log out"
+    },
+    "staffSwitcher": {
+      "viewingAs": "Viewing as",
+      "allStaff": "All staff",
+      "locked": "PIN",
+      "pinPlaceholder": "Enter PIN",
+      "unlock": "Unlock",
+      "errors": {
+        "invalid_pin": "Wrong PIN. Try again.",
+        "locked": "Too many wrong attempts. Try again later.",
+        "generic": "Something went wrong. Try again."
+      }
+    },
+    "hours": {
+      "title": "Working hours",
+      "subtitle": "Hours and slot length for the default staff member.",
+      "subtitleFor": "Hours and slot length for {{name}}.",
+      "slotMinutes": "Slot (min)",
+      "vacationTitle": "Vacation & days off",
+      "vacationHint": "Date ranges added here are blocked from public booking, on top of the weekly hours above.",
+      "vacationEmpty": "No upcoming time off.",
+      "vacationFrom": "From",
+      "vacationTo": "To",
+      "vacationNote": "Note (optional)",
+      "vacationAdd": "Add",
+      "vacationError": "Couldn't add that range -- check the dates and try again."
+    },
+    "stats": {
+      "title": "Stats",
+      "subtitle": "How your business is doing.",
+      "revenue": "Revenue this month",
+      "confirmed": "Confirmed this month",
+      "upcoming": "Upcoming",
+      "cancellationRate": "Cancellation rate",
+      "last14Days": "Last 14 days",
+      "topServices": "Top services this month",
+      "empty": "No bookings yet this month."
+    },
+    "agenda": {
+      "title": "Agenda",
+      "subtitle": "All appointments for your business.",
+      "statusAll": "All",
+      "statusPending": "Pending",
+      "statusConfirmed": "Confirmed",
+      "statusCancelled": "Cancelled",
+      "viewList": "List",
+      "viewCalendar": "Calendar",
+      "dateFrom": "From",
+      "dateTo": "To",
+      "empty": "No appointments in this range.",
+      "approve": "Approve",
+      "cancel": "Cancel",
+      "addAppointment": "Add appointment",
+      "addAppointmentSubmit": "Add appointment",
+      "staffLabel": "Staff member",
+      "serviceLabel": "Service",
+      "servicePlaceholder": "Choose a service",
+      "startsAtLabel": "Date & time",
+      "move": "Move",
+      "confirmMove": "Confirm move",
+      "notifyClient": "Notify client",
+      "flagged": "Flagged",
+      "flaggedHint": "This phone, IP, or your business hit today's booking volume cap, so this was held for review instead of auto-confirming.",
+      "noContact": "no contact info"
+    },
+    "staff": {
+      "title": "Staff",
+      "subtitle": "Add and manage who works here.",
+      "switcherHint": "Use the \"Viewing as\" switcher in the sidebar to act as a specific staff member and manage their own services, hours, and appointments. They can set their own optional PIN from Settings once you've switched to them.",
+      "bioPlaceholder": "Short bio or specialties shown on your public page (optional)",
+      "uploadPhoto": "Upload photo",
+      "removePhoto": "Remove photo",
+      "active": "Active",
+      "pinSet": "PIN set",
+      "pinNotSet": "PIN not set",
+      "resetPin": "Reset PIN",
+      "newStaffName": "Name",
+      "copyServicesFrom": "Copy services from",
+      "copyServicesNone": "Don't copy",
+      "addStaff": "Add staff"
+    },
+    "clients": {
+      "title": "Clients",
+      "subtitle": "Clients who've booked or been added manually.",
+      "search": "Search",
+      "searchPlaceholder": "Name, email, or phone",
+      "noResults": "No clients match your search.",
+      "bookingCount": "{{count}} booking",
+      "bookingCount_other": "{{count}} bookings",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "approved": "Approved",
+      "notApproved": "Not approved",
+      "approve": "Approve",
+      "removeTrusted": "Remove from trusted",
+      "addClient": "Add client",
+      "addClientAction": "Add",
+      "empty": "No clients yet."
+    },
+    "marketing": {
+      "title": "Marketing",
+      "subtitle": "Vouchers you grant to clients, honored in person -- nothing here charges anyone.",
+      "notEnabled": "Marketing tools are off. Turn them on from Settings to use vouchers.",
+      "goToSettings": "Go to Settings",
+      "loyaltyActive": "Loyalty is on: clients get a free-booking voucher every {{n}} bookings.",
+      "unknownClient": "Unknown client",
+      "freeBooking": "Free booking",
+      "percentOff": "{{percent}}% off",
+      "loyaltySource": "earned via loyalty",
+      "used": "Used",
+      "pending": "Not used yet",
+      "revoke": "Revoke",
+      "empty": "No vouchers yet.",
+      "grantVoucher": "Grant a voucher",
+      "grantHint": "Shown on the client's next booking confirmation email; you honor it in person.",
+      "client": "Client",
+      "selectClient": "Select a client",
+      "voucherKind": "Type",
+      "percentOffOption": "% off",
+      "percentOffLabel": "% off",
+      "grantAction": "Grant"
+    },
+    "branding": {
+      "title": "Branding",
+      "subtitle": "Your page's logo, cover photo, accent colour, and tagline.",
+      "logo": "Logo",
+      "cover": "Cover photo",
+      "uploadLogo": "Upload logo",
+      "uploadCover": "Upload cover photo",
+      "uploading": "Uploading...",
+      "saved": "Saved",
+      "preview": "Preview",
+      "gallery": "Gallery",
+      "galleryHint": "Shown on your booking page when you add at least one photo.",
+      "addPhoto": "Add photo"
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Core details and booking behaviour.",
+      "businessName": "Business name",
+      "slug": "Link (slug)",
+      "slugHint": "Your page: /b/{{slug}}",
+      "currency": "Currency",
+      "locale": "Default language",
+      "remindersEnabled": "Enable reminders",
+      "reminderLeadMinutes": "Remind before (min)",
+      "save": "Save",
+      "saved": "Saved",
+      "publicPage": "Public page",
+      "publicPageHint": "Shown on your booking page when filled in -- leave blank to hide a section.",
+      "address": "Address",
+      "aboutText": "About",
+      "contactPhone": "Contact phone",
+      "instagramUrl": "Instagram URL",
+      "facebookUrl": "Facebook URL",
+      "websiteUrl": "Website URL",
+      "marketing": "Marketing",
+      "marketingHint": "Off by default. Turn on to send clients vouchers -- manually, or automatically via a loyalty reward. The owner honors any voucher in person; nothing here charges a client.",
+      "marketingEnabled": "Enable marketing tools",
+      "loyaltyEnabled": "Reward repeat clients automatically",
+      "loyaltyEveryN": "Free booking every (visits)",
+      "myPin": "My PIN",
+      "myPinHint": "Optional -- ask for this PIN next time someone switches into this staff member's view on a shared device.",
+      "myPinSwitchHint": "Switch to a specific staff member above to set their PIN.",
+      "setUpPin": "Set up PIN",
+      "changePin": "Change PIN",
+      "removePin": "Remove PIN",
+      "pin": "PIN",
+      "confirmPin": "Confirm PIN"
+    },
+    "billing": {
+      "title": "Billing",
+      "subtitle": "Your current plan and subscription status.",
+      "renewsOn": "renews {{date}}",
+      "promoEndsOn": "free trial ends {{date}}",
+      "cancel": "Cancel subscription",
+      "promoCode": "Promo code",
+      "promoRedeem": "Redeem",
+      "status": {
+        "none": "Not subscribed",
+        "active": "Active",
+        "past_due": "Payment failed",
+        "canceled": "Canceled",
+        "promo": "Free trial"
+      },
+      "promoErrors": {
+        "invalid_code": "That code isn't valid.",
+        "already_redeemed": "That code has already been used."
+      }
+    },
+    "planErrors": {
+      "upgradeLink": "Upgrade your plan",
+      "requiresTop": "requires Top plan",
+      "plan_staff_limit_reached": "Your plan's staff limit has been reached.",
+      "plan_branding_not_allowed": "Branding isn't included in your current plan.",
+      "plan_too_small_for_existing_staff": "That plan doesn't allow enough staff for everyone you already have.",
+      "plan_stats_not_allowed": "Stats aren't included in your current plan.",
+      "plan_marketing_tools_not_allowed": "Marketing tools aren't included in your current plan.",
+      "subscription_required": "This business needs an active subscription to take bookings."
+    }
+  }
+}

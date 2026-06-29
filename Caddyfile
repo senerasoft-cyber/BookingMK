@@ -1,0 +1,12 @@
+bukano.net, www.bukano.net {
+	encode gzip
+
+	root * /srv/frontend
+	try_files {path} /index.html
+	file_server
+}
+
+api.bukano.net {
+	encode gzip
+	reverse_proxy backend:5000
+}
