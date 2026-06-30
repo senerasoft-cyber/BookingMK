@@ -30,14 +30,18 @@ from app.schemas import (
     PasswordResetRequestSchema,
     RefreshSchema,
     RegisterSchema,
+    RegisterVerifySchema,
     parse,
 )
+from app.turnstile import verify_turnstile
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 LOGIN_MAX_ATTEMPTS = 5
 LOGIN_LOCKOUT_MINUTES = 15
 PASSWORD_RESET_COOLDOWN_SECONDS = 60
+REGISTER_CODE_TTL_MINUTES = 10
+REGISTER_CODE_MAX_ATTEMPTS = 5
 
 
 def _tokens_response(user: User, status: int = 200):
@@ -68,11 +72,29 @@ def _unique_slug(name: str) -> str:
     return slug
 
 
+def _send_register_code(user: User) -> None:
+    import secrets as _secrets
+
+    code = f"{_secrets.randbelow(1_000_000):06d}"
+    user.email_verify_code_hash = hash_password(code)
+    user.email_verify_expires_at = utcnow() + timedelta(minutes=REGISTER_CODE_TTL_MINUTES)
+    user.email_verify_attempts = 0
+    db.session.commit()
+    get_email_sender().send(
+        user.email,
+        "Your Bukano verification code",
+        f"Your verification code is {code}. It expires in {REGISTER_CODE_TTL_MINUTES} minutes.",
+    )
+
+
 @auth_bp.post("/register")
 def register():
     payload, errors = parse(RegisterSchema, request.get_json(silent=True) or {})
     if errors:
         return jsonify({"errors": errors}), 400
+
+    if not verify_turnstile(payload.turnstile_token, request.remote_addr):
+        return jsonify({"error": "captcha_failed"}), 400
 
     email = payload.email.lower()
     if User.query.filter_by(email=email).first() is not None:
@@ -89,9 +111,6 @@ def register():
     db.session.add(business)
     db.session.flush()
 
-    # Every business gets one staff member automatically, representing the
-    # owner -- single-operator businesses then need zero extra setup, since
-    # all staff-scoped endpoints default to this one when no staff_id is given.
     staff = StaffMember(business_id=business.id, name="Owner")
     db.session.add(staff)
     db.session.flush()
@@ -108,14 +127,54 @@ def register():
         )
 
     db.session.commit()
+    _send_register_code(user)
+
+    return jsonify({"status": "verification_required", "email": email}), 200
+
+
+@auth_bp.post("/register/verify")
+def register_verify():
+    payload, errors = parse(RegisterVerifySchema, request.get_json(silent=True) or {})
+    if errors:
+        return jsonify({"errors": errors}), 400
+
+    email = payload.email.lower()
+    user = User.query.filter_by(email=email).first()
+    if user is None or user.email_verified_at is not None:
+        return jsonify({"error": "invalid_or_expired_code"}), 400
+
+    if not user.email_verify_code_hash or seconds_since(user.email_verify_expires_at) > 0:
+        return jsonify({"error": "invalid_or_expired_code"}), 400
+    if user.email_verify_attempts >= REGISTER_CODE_MAX_ATTEMPTS:
+        return jsonify({"error": "too_many_attempts"}), 429
+    if not verify_password(user.email_verify_code_hash, payload.code):
+        user.email_verify_attempts += 1
+        db.session.commit()
+        return jsonify({"error": "invalid_or_expired_code"}), 400
+
+    user.email_verified_at = utcnow()
+    user.email_verify_code_hash = None
+    db.session.commit()
 
     get_email_sender().send(
         user.email,
         "Welcome to Bukano",
-        f"Your business '{business.name}' is set up. Finish onboarding to start taking bookings.",
+        f"Your business '{user.business.name}' is set up. Finish onboarding to start taking bookings.",
     )
 
     return _tokens_response(user, status=201)
+
+
+@auth_bp.post("/register/resend")
+def register_resend():
+    """Resend the verification code if the user didn't get it.
+    Same security response regardless of whether the email exists."""
+    data = request.get_json(silent=True) or {}
+    email = (data.get("email") or "").lower().strip()
+    user = User.query.filter_by(email=email).first()
+    if user is not None and user.email_verified_at is None:
+        _send_register_code(user)
+    return jsonify({"status": "sent"})
 
 
 @auth_bp.post("/login")
@@ -137,6 +196,9 @@ def login():
             user.login_locked_until = utcnow() + timedelta(minutes=LOGIN_LOCKOUT_MINUTES)
         db.session.commit()
         return jsonify({"error": "invalid_credentials"}), 401
+
+    if not user.email_verified_at:
+        return jsonify({"error": "email_not_verified"}), 403
 
     user.login_attempts = 0
     user.login_locked_until = None

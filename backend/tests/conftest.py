@@ -31,19 +31,35 @@ def register_business(
     business_name="Studio Linija",
     plan_id="top",
 ):
-    """Registers and, unless `plan_id=None`, immediately subscribes to `plan_id`
-    via the dev stub billing provider (no real payment in tests) -- the vast
-    majority of tests are about booking/staff/etc. behavior, not the paywall
-    itself, so they shouldn't all have to know a subscription is required.
-    Tests for the paywall itself pass plan_id=None to get an unsubscribed
-    business on purpose.
-    """
-    response = client.post(
+    """Registers, verifies the email using the code from the DB directly
+    (tests skip the real email step), and unless `plan_id=None`, immediately
+    subscribes via the dev stub billing provider."""
+    from app.models import User
+
+    reg = client.post(
         "/auth/register",
         json={"email": email, "password": password, "business_name": business_name},
     )
-    assert response.status_code == 201, response.get_json()
-    data = response.get_json()
+    assert reg.status_code == 200, reg.get_json()
+    assert reg.get_json()["status"] == "verification_required"
+
+    # Grab the code hash from the DB and brute-force it via the verify endpoint.
+    # In tests, SMTP is stubbed so we can't read the email; read from DB instead.
+    # Patch the user's code hash with one we control so we can call verify.
+    from app.auth import hash_password
+    from app.extensions import db
+    from app.models import User
+
+    user = User.query.filter_by(email=email).first()
+    known_code = "123456"
+    user.email_verify_code_hash = hash_password(known_code)
+    db.session.commit()
+
+    verify = client.post(
+        "/auth/register/verify", json={"email": email, "code": known_code}
+    )
+    assert verify.status_code == 201, verify.get_json()
+    data = verify.get_json()
 
     if plan_id is not None:
         checkout = client.post(

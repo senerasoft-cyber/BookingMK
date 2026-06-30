@@ -50,6 +50,15 @@ class User(db.Model):
     # Platform operator, not a per-business permission -- granted only via the
     # `flask create-admin` CLI command, no self-service path to set this.
     is_platform_admin = db.Column(db.Boolean, nullable=False, default=False)
+    # Null until the owner clicks the 6-digit code emailed at registration.
+    # Login is blocked until this is set (see /auth/login).
+    email_verified_at = db.Column(db.DateTime(timezone=True), nullable=True)
+    # Registration verification code stored directly on User so it doesn't
+    # interfere with the booking-flow VerificationCode table (different
+    # purpose, different rate limits).
+    email_verify_code_hash = db.Column(db.String(255), nullable=True)
+    email_verify_expires_at = db.Column(db.DateTime(timezone=True), nullable=True)
+    email_verify_attempts = db.Column(db.Integer, nullable=False, default=0)
     created_at = db.Column(db.DateTime(timezone=True), default=utcnow, nullable=False)
 
     business = db.relationship(

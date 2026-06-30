@@ -5,32 +5,133 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { Button } from '../../components/Button'
 import { TextInput } from '../../components/TextInput'
+import { TurnstileWidget } from '../../components/TurnstileWidget'
 import { useAuth } from '../../context/AuthContext'
-import { ApiError } from '../../lib/api'
+import { ApiError, apiPost } from '../../lib/api'
+import { setTokens } from '../../lib/tokens'
 import { pathForStep } from '../../onboardingSteps'
 import { AuthCard } from './AuthCard'
 
-type FormValues = { email: string; password: string; business_name: string }
+type FormValues = {
+  email: string
+  password: string
+  confirm_password: string
+  business_name: string
+}
+
+function VerifyEmailStep({
+  email,
+  onSuccess,
+}: {
+  email: string
+  onSuccess: (data: { access_token: string; refresh_token: string; business: { onboarding_step: number } }) => Promise<void>
+}) {
+  const { t } = useTranslation()
+  const [code, setCode] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [resent, setResent] = useState(false)
+
+  const submit = async () => {
+    setError(null)
+    setBusy(true)
+    try {
+      const result = await apiPost<{
+        access_token: string
+        refresh_token: string
+        business: { onboarding_step: number }
+      }>('/auth/register/verify', { email, code })
+      onSuccess(result)
+    } catch (err) {
+      if (err instanceof ApiError) {
+        const key = `auth.verify.errors.${err.message}`
+        const translated = t(key)
+        setError(translated === key ? t('common.somethingWentWrong') : translated)
+      } else {
+        setError(t('common.somethingWentWrong'))
+      }
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const resend = async () => {
+    await apiPost('/auth/register/resend', { email })
+    setResent(true)
+    setTimeout(() => setResent(false), 5000)
+  }
+
+  return (
+    <AuthCard title={t('auth.verify.title')} subtitle={t('auth.verify.subtitle', { email })}>
+      <div className="flex flex-col gap-4">
+        <input
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          inputMode="numeric"
+          maxLength={6}
+          placeholder="000000"
+          className="rounded-xl border border-stone-200 px-4 py-3 text-center text-2xl font-mono tracking-[0.4em] outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+          autoFocus
+        />
+        {error && <p className="text-sm text-red-600">{error}</p>}
+        <Button type="button" onClick={submit} disabled={busy || code.length < 6}>
+          {t('auth.verify.submit')}
+        </Button>
+        <button
+          type="button"
+          onClick={resend}
+          className="text-sm text-stone-500 underline"
+        >
+          {resent ? t('auth.verify.resent') : t('auth.verify.resend')}
+        </button>
+      </div>
+    </AuthCard>
+  )
+}
 
 export default function RegisterPage() {
   const { t } = useTranslation()
-  const { register: registerBusiness } = useAuth()
+  const { refreshBusiness } = useAuth()
   const navigate = useNavigate()
   const [serverError, setServerError] = useState<string | null>(null)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null)
+
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>()
 
   const onSubmit = async (values: FormValues) => {
     setServerError(null)
     try {
-      const business = await registerBusiness(values)
-      navigate(`/onboarding/${pathForStep(business.onboarding_step)}`)
+      const result = await apiPost<{ status: string; email: string }>('/auth/register', {
+        email: values.email,
+        password: values.password,
+        business_name: values.business_name,
+        turnstile_token: turnstileToken,
+      })
+      if (result.status === 'verification_required') {
+        setPendingEmail(result.email)
+      }
     } catch (err) {
       setServerError(err instanceof ApiError ? err.message : t('common.somethingWentWrong'))
     }
+  }
+
+  if (pendingEmail) {
+    return (
+      <VerifyEmailStep
+        email={pendingEmail}
+        onSuccess={async (data) => {
+          setTokens(data.access_token, data.refresh_token)
+          await refreshBusiness()
+          navigate(`/onboarding/${pathForStep(data.business.onboarding_step)}`)
+        }}
+      />
+    )
   }
 
   return (
@@ -53,6 +154,16 @@ export default function RegisterPage() {
           {...register('password', { required: true, minLength: 8 })}
           error={errors.password && t('auth.register.passwordMinLength')}
         />
+        <TextInput
+          label={t('auth.register.confirmPassword')}
+          type="password"
+          {...register('confirm_password', {
+            required: true,
+            validate: (v) => v === watch('password') || t('auth.register.passwordMismatch'),
+          })}
+          error={errors.confirm_password?.message}
+        />
+        <TurnstileWidget onVerify={setTurnstileToken} />
         {serverError && <p className="text-sm text-red-600">{serverError}</p>}
         <p className="text-xs text-stone-400">
           {t('auth.register.agreeToTermsPrefix')}{' '}
@@ -65,7 +176,7 @@ export default function RegisterPage() {
           </Link>
           .
         </p>
-        <Button type="submit" disabled={isSubmitting} className="mt-2">
+        <Button type="submit" disabled={isSubmitting || !turnstileToken} className="mt-2">
           {t('auth.register.submit')}
         </Button>
       </form>

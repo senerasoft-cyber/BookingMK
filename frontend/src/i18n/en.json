@@ -35,7 +35,9 @@
       "submit": "Create account",
       "haveAccount": "Already have an account?",
       "loginLink": "Log in",
+      "confirmPassword": "Confirm password",
       "passwordMinLength": "At least 8 characters",
+      "passwordMismatch": "Passwords don't match",
       "agreeToTermsPrefix": "By creating an account, you agree to our",
       "termsLink": "Terms of Service",
       "privacyLink": "Privacy Policy"
@@ -56,6 +58,17 @@
       "submit": "Send reset link",
       "sent": "If that email exists, a reset link has been sent.",
       "backToLogin": "Back to log in"
+    },
+    "verify": {
+      "title": "Check your email",
+      "subtitle": "We sent a 6-digit code to {{email}}. Enter it below to confirm your account.",
+      "submit": "Confirm",
+      "resend": "Didn't receive it? Send again",
+      "resent": "Sent! Check your inbox.",
+      "errors": {
+        "invalid_or_expired_code": "That code is wrong or has expired. Try again or request a new one.",
+        "too_many_attempts": "Too many wrong attempts. Request a new code."
+      }
     },
     "resetPassword": {
       "title": "Set a new password",
