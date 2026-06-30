@@ -37,7 +37,10 @@ export function TurnstileWidget({ onVerify }: { onVerify: (token: string | null)
   const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
   useEffect(() => {
-    if (!siteKey) return
+    if (!siteKey) {
+      onVerify('')
+      return
+    }
 
     let widgetId: string | undefined
     loadTurnstileScript().then(() => {
@@ -51,7 +54,9 @@ export function TurnstileWidget({ onVerify }: { onVerify: (token: string | null)
     return () => {
       if (widgetId && window.turnstile) window.turnstile.reset(widgetId)
     }
-  }, [siteKey, onVerify])
+  // onVerify is a stable state setter — intentionally omitted to avoid re-render loops
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [siteKey])
 
   if (!siteKey) return null
   return <div ref={containerRef} className="mt-2" />

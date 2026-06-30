@@ -176,7 +176,7 @@ export default function RegisterPage() {
           </Link>
           .
         </p>
-        <Button type="submit" disabled={isSubmitting || !turnstileToken} className="mt-2">
+        <Button type="submit" disabled={isSubmitting || turnstileToken === null} className="mt-2">
           {t('auth.register.submit')}
         </Button>
       </form>
