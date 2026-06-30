@@ -131,7 +131,7 @@ def _seed_one(spec: dict) -> Business:
     business_type = BUSINESS_TYPES_BY_ID[spec["type_id"]]
     flagship = spec.get("flagship", False)
 
-    user = User(email=spec["email"], password_hash=hash_password(DEMO_PASSWORD))
+    user = User(email=spec["email"], password_hash=hash_password(DEMO_PASSWORD), email_verified_at=utcnow())
     business = Business(
         owner=user,
         name=spec["name"],
