@@ -143,7 +143,9 @@
       "featureMarketingTools": "Маркетинг алатки (кодови и лојалност)",
       "featureWhiteLabel": "Отстрани „Овозможено од Bukano“ брендинг",
       "subscribe": "Претплати се",
-      "current": "Тековен план"
+      "current": "Тековен план",
+      "havePromo": "Имаш промо код?",
+      "promoRedeem": "Активирај"
     },
     "live": {
       "title": "Си во живо!",

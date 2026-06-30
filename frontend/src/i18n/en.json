@@ -143,7 +143,9 @@
       "featureMarketingTools": "Marketing tools (vouchers & loyalty)",
       "featureWhiteLabel": "Remove \"Powered by Bukano\" branding",
       "subscribe": "Subscribe",
-      "current": "Current plan"
+      "current": "Current plan",
+      "havePromo": "Have a promo code?",
+      "promoRedeem": "Redeem"
     },
     "live": {
       "title": "You're live!",
