@@ -31,13 +31,13 @@ function NavBar() {
           to="/register"
           className="rounded-xl bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 transition-colors"
         >
-          Get started free
+          Get started
         </Link>
       </div>
       <div className="flex sm:hidden items-center gap-3">
         <Link to="/login" className="text-sm text-stone-600">Sign in</Link>
         <Link to="/register" className="rounded-xl bg-orange-500 px-3 py-1.5 text-sm font-medium text-white">
-          Start free
+          Get started
         </Link>
       </div>
     </nav>
@@ -188,7 +188,7 @@ export default function HomePage() {
               to="/register"
               className="rounded-xl bg-orange-500 px-6 py-3 text-base font-semibold text-white hover:bg-orange-600 transition-colors text-center"
             >
-              Start for free
+              Get started
             </Link>
             <Link
               to="/pricing"
@@ -197,7 +197,7 @@ export default function HomePage() {
               See pricing
             </Link>
           </div>
-          <p className="mt-4 text-xs text-stone-400">No credit card required · Set up in minutes</p>
+          <p className="mt-4 text-xs text-stone-400">Plans from €9/month · Set up in minutes</p>
         </div>
 
         <div className="flex-1 flex justify-center lg:justify-end">
@@ -257,14 +257,14 @@ export default function HomePage() {
             Ready to fill your calendar?
           </h2>
           <p className="text-orange-100 mb-8">
-            Join businesses already using Bukano. Free to start, no credit card required.
+            Plans start at €9/month. Set up your booking page in minutes.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               to="/register"
               className="rounded-xl bg-white px-6 py-3 text-base font-semibold text-orange-600 hover:bg-orange-50 transition-colors"
             >
-              Create free account
+              Create account
             </Link>
             <Link
               to="/login"
