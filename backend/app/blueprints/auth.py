@@ -31,7 +31,9 @@ from app.schemas import (
     RefreshSchema,
     RegisterSchema,
     RegisterVerifySchema,
+    is_common_password,
     parse,
+    password_contains,
 )
 from app.turnstile import verify_turnstile
 
@@ -97,6 +99,14 @@ def register():
         return jsonify({"error": "captcha_failed"}), 400
 
     email = payload.email.lower()
+    if is_common_password(payload.password):
+        return jsonify(
+            {"errors": {"password": "That password is too common -- please choose something less predictable."}}
+        ), 400
+    if password_contains(payload.password, email.split("@")[0]):
+        return jsonify(
+            {"errors": {"password": "Your password shouldn't contain your email address."}}
+        ), 400
     if User.query.filter_by(email=email).first() is not None:
         return jsonify({"errors": {"email": "Email is already registered"}}), 409
 
@@ -262,6 +272,15 @@ def password_reset_confirm():
     user = verify_password_reset_token(payload.token)
     if user is None:
         return jsonify({"error": "invalid_or_expired_token"}), 400
+
+    if is_common_password(payload.new_password):
+        return jsonify(
+            {"errors": {"new_password": "That password is too common -- please choose something less predictable."}}
+        ), 400
+    if password_contains(payload.new_password, user.email.split("@")[0]):
+        return jsonify(
+            {"errors": {"new_password": "Your password shouldn't contain your email address."}}
+        ), 400
 
     user.password_hash = hash_password(payload.new_password)
     user.login_attempts = 0

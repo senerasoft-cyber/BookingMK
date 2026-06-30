@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
+import { Calendar, Globe, Image as ImageIcon, Info, MapPin, Tag, Users } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
+import { ThemeToggle } from '../../components/ThemeToggle'
 import { apiGet } from '../../lib/api'
 import { getAccent } from '../../theme/accents'
 import type { BookingResult, PublicBusiness, PublicService, PublicStaff } from '../../types'
@@ -22,13 +24,21 @@ type PendingVerification = {
   devCode?: string
 }
 
+function initials(name: string) {
+  const parts = name.trim().split(/\s+/)
+  return parts
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase())
+    .join('')
+}
+
 function LanguageSwitcher() {
   const { i18n } = useTranslation()
   return (
     <select
       value={i18n.language.startsWith('mk') ? 'mk' : 'en'}
       onChange={(e) => i18n.changeLanguage(e.target.value)}
-      className="rounded-lg border border-stone-200 bg-white px-2 py-1 text-xs text-stone-600"
+      className="rounded-lg border border-stone-200 bg-white px-2 py-1 text-xs text-stone-600 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300"
     >
       <option value="en">EN</option>
       <option value="mk">МК</option>
@@ -64,11 +74,15 @@ export default function StudioPage() {
   })
 
   if (isPending) {
-    return <div className="flex min-h-screen items-center justify-center text-stone-400">…</div>
+    return (
+      <div className="flex min-h-screen items-center justify-center text-stone-400 dark:bg-stone-950 dark:text-stone-500">
+        …
+      </div>
+    )
   }
   if (isError || !business) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-stone-500">
+      <div className="flex min-h-screen items-center justify-center text-stone-500 dark:bg-stone-950 dark:text-stone-400">
         {t('public.notFound')}
       </div>
     )
@@ -80,82 +94,168 @@ export default function StudioPage() {
   const hasGallery = business.gallery_urls.length > 0
   const hasSocial = !!(business.instagram_url || business.facebook_url || business.website_url)
 
-  const NAV_ITEMS: { key: View; labelKey: string }[] = [
-    { key: 'book', labelKey: 'public.nav.book' },
-    { key: 'pricing', labelKey: 'public.nav.pricing' },
-    ...(business.staff.length > 0 ? [{ key: 'staff' as const, labelKey: 'public.nav.staff' }] : []),
-    ...(hasAbout ? [{ key: 'about' as const, labelKey: 'public.nav.about' }] : []),
-    ...(hasGallery ? [{ key: 'gallery' as const, labelKey: 'public.nav.gallery' }] : []),
+  const NAV_ITEMS: { key: View; labelKey: string; icon: typeof Calendar }[] = [
+    { key: 'book', labelKey: 'public.nav.book', icon: Calendar },
+    { key: 'pricing', labelKey: 'public.nav.pricing', icon: Tag },
+    ...(business.staff.length > 0
+      ? [{ key: 'staff' as const, labelKey: 'public.nav.staff', icon: Users }]
+      : []),
+    ...(hasAbout ? [{ key: 'about' as const, labelKey: 'public.nav.about', icon: Info }] : []),
+    ...(hasGallery ? [{ key: 'gallery' as const, labelKey: 'public.nav.gallery', icon: ImageIcon }] : []),
   ]
 
   return (
     <div className={`min-h-screen ${accent.canvas}`}>
-      <nav className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 bg-white px-4 py-2 shadow-sm">
-        <span />
-        <div className="flex flex-wrap justify-center gap-1">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.key}
-              type="button"
-              onClick={() => setView(item.key)}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
-                view === item.key ? `${accent.soft} ${accent.softText}` : 'text-stone-500 hover:bg-stone-100'
-              }`}
-            >
-              {t(item.labelKey)}
-            </button>
-          ))}
-        </div>
-        <div className="justify-self-end">
-          <LanguageSwitcher />
-        </div>
-      </nav>
+      <div className="sticky top-0 z-20 flex items-center justify-end gap-2 border-b border-stone-200/70 bg-white/80 px-4 py-2 backdrop-blur dark:border-stone-800/70 dark:bg-stone-900/80">
+        <ThemeToggle />
+        <LanguageSwitcher />
+      </div>
 
-      <div
-        className={`h-40 ${accent.main}`}
-        style={
-          business.cover_url
-            ? {
-                backgroundImage: `url(${business.cover_url})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }
-            : undefined
-        }
-      />
-
-      <div className="mx-auto max-w-xl px-6 pb-16 pt-4 text-center">
-        {business.logo_url && (
-          <img
-            src={business.logo_url}
-            alt={business.name}
-            className="mx-auto h-16 w-16 rounded-full border-4 border-white object-cover shadow-md"
-          />
+      <div className="relative h-48 overflow-hidden sm:h-64">
+        {business.cover_url ? (
+          <img src={business.cover_url} alt="" className="h-full w-full object-cover" />
+        ) : (
+          <div className={`relative h-full w-full ${accent.main}`}>
+            <div
+              className="absolute inset-0 opacity-20"
+              style={{
+                backgroundImage: 'radial-gradient(white 1.5px, transparent 1.5px)',
+                backgroundSize: '22px 22px',
+              }}
+            />
+          </div>
         )}
-        <h1 className="mt-3 font-display text-2xl font-semibold text-stone-900">
-          {business.name}
-        </h1>
-        {business.tagline && <p className="mt-1 text-stone-500">{business.tagline}</p>}
+        <div className={`absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t ${accent.canvasFrom} to-transparent`} />
+      </div>
 
-        <div className="mt-6 rounded-2xl bg-white p-6 text-left shadow-lg shadow-stone-200">
+      <div className="mx-auto max-w-2xl px-4 pb-16 sm:px-6">
+        <div className="relative -mt-12 rounded-3xl bg-white px-6 py-7 text-center shadow-xl shadow-stone-200/60 ring-1 ring-stone-100 dark:bg-stone-900 dark:shadow-none dark:ring-stone-800 sm:px-8">
+          {business.logo_url ? (
+            <img
+              src={business.logo_url}
+              alt={business.name}
+              className="mx-auto -mt-16 h-20 w-20 rounded-2xl border-4 border-white object-cover shadow-md dark:border-stone-900"
+            />
+          ) : (
+            <div
+              className={`mx-auto -mt-16 flex h-20 w-20 items-center justify-center rounded-2xl border-4 border-white font-display text-xl font-semibold shadow-md dark:border-stone-900 ${accent.soft} ${accent.softText}`}
+            >
+              {initials(business.name)}
+            </div>
+          )}
+
+          <h1 className="mt-4 font-display text-2xl font-semibold text-stone-900 dark:text-stone-50">
+            {business.name}
+          </h1>
+          {business.tagline && <p className="mt-1 text-stone-500 dark:text-stone-400">{business.tagline}</p>}
+
+          {(business.address || business.staff.length > 0 || business.services.length > 0) && (
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+              {business.address && (
+                <span
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${accent.soft} ${accent.softText}`}
+                >
+                  <MapPin size={13} /> {business.address}
+                </span>
+              )}
+              {business.staff.length > 0 && (
+                <span
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${accent.soft} ${accent.softText}`}
+                >
+                  <Users size={13} />
+                  {business.staff.length} {t('public.nav.staff')}
+                </span>
+              )}
+              {business.services.length > 0 && (
+                <span
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${accent.soft} ${accent.softText}`}
+                >
+                  <Tag size={13} />
+                  {business.services.length} {t('public.nav.pricing')}
+                </span>
+              )}
+            </div>
+          )}
+
+          {hasSocial && (
+            <div className="mt-5 flex flex-wrap justify-center gap-2">
+              {business.instagram_url && (
+                <a
+                  href={business.instagram_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full bg-stone-100 px-3 py-1.5 text-xs font-medium text-stone-500 hover:bg-stone-200 hover:text-stone-700 dark:bg-stone-800 dark:text-stone-400 dark:hover:bg-stone-700 dark:hover:text-stone-200"
+                >
+                  Instagram
+                </a>
+              )}
+              {business.facebook_url && (
+                <a
+                  href={business.facebook_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full bg-stone-100 px-3 py-1.5 text-xs font-medium text-stone-500 hover:bg-stone-200 hover:text-stone-700 dark:bg-stone-800 dark:text-stone-400 dark:hover:bg-stone-700 dark:hover:text-stone-200"
+                >
+                  Facebook
+                </a>
+              )}
+              {business.website_url && (
+                <a
+                  href={business.website_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 rounded-full bg-stone-100 px-3 py-1.5 text-xs font-medium text-stone-500 hover:bg-stone-200 hover:text-stone-700 dark:bg-stone-800 dark:text-stone-400 dark:hover:bg-stone-700 dark:hover:text-stone-200"
+                >
+                  <Globe size={13} /> {t('public.website')}
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="mt-6 flex flex-wrap justify-center gap-1.5">
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.icon
+            return (
+              <button
+                key={item.key}
+                type="button"
+                onClick={() => setView(item.key)}
+                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                  view === item.key
+                    ? `${accent.main} ${accent.mainText} shadow-sm`
+                    : 'bg-white text-stone-500 ring-1 ring-stone-200 hover:bg-stone-50 dark:bg-stone-900 dark:text-stone-400 dark:ring-stone-800 dark:hover:bg-stone-800'
+                }`}
+              >
+                <Icon size={15} />
+                {t(item.labelKey)}
+              </button>
+            )
+          })}
+        </div>
+
+        <div className="relative mt-4 overflow-hidden rounded-3xl bg-white p-6 text-left shadow-lg shadow-stone-200/60 ring-1 ring-stone-100 dark:bg-stone-900 dark:shadow-none dark:ring-stone-800 sm:p-8">
+          <div className={`absolute inset-x-0 top-0 h-1.5 ${accent.main}`} />
+
           {view === 'pricing' && (
             <div>
-              <h2 className="font-display text-lg font-semibold text-stone-900">
+              <h2 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">
                 {t('public.nav.pricing')}
               </h2>
               {needsStaffPicker && !selectedStaff && (
-                <p className="mt-3 text-sm text-stone-500">{t('public.nav.pricingPickStaff')}</p>
+                <p className="mt-3 text-sm text-stone-500 dark:text-stone-400">{t('public.nav.pricingPickStaff')}</p>
               )}
               <ul className="mt-3 flex flex-col gap-2">
                 {services.map((svc) => (
                   <li
                     key={svc.id}
-                    className="flex items-center justify-between rounded-xl border border-stone-200 p-3"
+                    className="flex items-center justify-between rounded-xl border border-stone-200 p-3 dark:border-stone-700"
                   >
-                    <span className="font-medium text-stone-800">{svc.name}</span>
-                    <span className="text-sm text-stone-500">
-                      {svc.duration_minutes} {t('public.service.minutes')} · {svc.price}{' '}
-                      {business.currency}
+                    <span className="font-medium text-stone-800 dark:text-stone-200">{svc.name}</span>
+                    <span
+                      className={`shrink-0 rounded-full px-2.5 py-1 text-sm font-semibold ${accent.soft} ${accent.softText}`}
+                    >
+                      {svc.price} {business.currency}
                     </span>
                   </li>
                 ))}
@@ -170,7 +270,7 @@ export default function StudioPage() {
                       className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
                         selectedStaff?.id === member.id
                           ? `${accent.soft} ${accent.softText}`
-                          : 'border border-stone-200 text-stone-600'
+                          : 'border border-stone-200 text-stone-600 dark:border-stone-700 dark:text-stone-300'
                       }`}
                     >
                       {member.name}
@@ -183,25 +283,31 @@ export default function StudioPage() {
 
           {view === 'staff' && (
             <div>
-              <h2 className="font-display text-lg font-semibold text-stone-900">
+              <h2 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">
                 {t('public.nav.staff')}
               </h2>
               <ul className="mt-3 flex flex-col gap-3">
                 {business.staff.map((member) => (
                   <li
                     key={member.id}
-                    className="flex items-start gap-3 rounded-xl border border-stone-200 p-3"
+                    className="flex items-start gap-3 rounded-xl border border-stone-200 p-3 dark:border-stone-700"
                   >
-                    {member.photo_url && (
+                    {member.photo_url ? (
                       <img
                         src={member.photo_url}
                         alt={member.name}
-                        className="h-10 w-10 shrink-0 rounded-full object-cover"
+                        className="h-12 w-12 shrink-0 rounded-full object-cover"
                       />
+                    ) : (
+                      <div
+                        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full font-display text-sm font-semibold ${accent.soft} ${accent.softText}`}
+                      >
+                        {initials(member.name)}
+                      </div>
                     )}
                     <div>
-                      <p className="font-medium text-stone-800">{member.name}</p>
-                      {member.bio && <p className="mt-1 text-sm text-stone-500">{member.bio}</p>}
+                      <p className="font-medium text-stone-800 dark:text-stone-200">{member.name}</p>
+                      {member.bio && <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">{member.bio}</p>}
                     </div>
                   </li>
                 ))}
@@ -211,23 +317,23 @@ export default function StudioPage() {
 
           {view === 'about' && (
             <div>
-              <h2 className="font-display text-lg font-semibold text-stone-900">
+              <h2 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">
                 {t('public.nav.about')}
               </h2>
               {business.about_text && (
-                <p className="mt-3 whitespace-pre-line text-sm text-stone-600">
+                <p className="mt-3 whitespace-pre-line text-sm text-stone-600 dark:text-stone-300">
                   {business.about_text}
                 </p>
               )}
               {business.address && (
-                <p className="mt-3 text-sm text-stone-600">
-                  <span className="font-medium text-stone-800">{t('public.about.address')}: </span>
+                <p className="mt-3 flex items-start gap-2 text-sm text-stone-600 dark:text-stone-300">
+                  <MapPin size={16} className="mt-0.5 shrink-0 text-stone-400 dark:text-stone-500" />
                   {business.address}
                 </p>
               )}
               {business.contact_phone && (
-                <p className="mt-1 text-sm text-stone-600">
-                  <span className="font-medium text-stone-800">{t('public.about.contact')}: </span>
+                <p className="mt-1 text-sm text-stone-600 dark:text-stone-300">
+                  <span className="font-medium text-stone-800 dark:text-stone-200">{t('public.about.contact')}: </span>
                   {business.contact_phone}
                 </p>
               )}
@@ -236,7 +342,7 @@ export default function StudioPage() {
 
           {view === 'gallery' && (
             <div>
-              <h2 className="font-display text-lg font-semibold text-stone-900">
+              <h2 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">
                 {t('public.nav.gallery')}
               </h2>
               <div className="mt-3 grid grid-cols-2 gap-2">
@@ -332,43 +438,8 @@ export default function StudioPage() {
           )}
         </div>
 
-        {hasSocial && (
-          <div className="mt-6 flex justify-center gap-4 text-sm">
-            {business.instagram_url && (
-              <a
-                href={business.instagram_url}
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium text-stone-400 hover:text-stone-600"
-              >
-                Instagram
-              </a>
-            )}
-            {business.facebook_url && (
-              <a
-                href={business.facebook_url}
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium text-stone-400 hover:text-stone-600"
-              >
-                Facebook
-              </a>
-            )}
-            {business.website_url && (
-              <a
-                href={business.website_url}
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium text-stone-400 hover:text-stone-600"
-              >
-                {t('public.website')}
-              </a>
-            )}
-          </div>
-        )}
-
         {!business.white_label && (
-          <p className="mt-8 text-xs text-stone-400">{t('public.poweredBy')}</p>
+          <p className="mt-6 text-center text-xs text-stone-400 dark:text-stone-500">{t('public.poweredBy')}</p>
         )}
       </div>
     </div>

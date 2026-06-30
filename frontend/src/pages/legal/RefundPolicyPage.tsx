@@ -9,7 +9,7 @@ export default function RefundPolicyPage() {
         Subscriptions are billed monthly in advance. This policy explains when a refund applies.
       </p>
 
-      <h2 className="font-display text-lg font-semibold text-stone-900">
+      <h2 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">
         Cancelling your subscription
       </h2>
       <p>
@@ -18,7 +18,7 @@ export default function RefundPolicyPage() {
         until it ends.
       </p>
 
-      <h2 className="font-display text-lg font-semibold text-stone-900">When we do refund</h2>
+      <h2 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">When we do refund</h2>
       <p>We'll issue a full or partial refund if:</p>
       <ul className="list-disc pl-5">
         <li>you were charged twice for the same billing period by mistake,</li>
@@ -26,7 +26,7 @@ export default function RefundPolicyPage() {
         <li>you were charged after a cancellation that should have taken effect first.</li>
       </ul>
 
-      <h2 className="font-display text-lg font-semibold text-stone-900">How to request one</h2>
+      <h2 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">How to request one</h2>
       <p>
         Email <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> with your account email and
         the charge you're asking about. Payments are processed by Paddle.com Market Limited, our

@@ -29,12 +29,12 @@ export default function BrandingStep() {
 
   return (
     <div>
-      <h2 className="font-display text-xl font-semibold text-stone-900">
+      <h2 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('onboarding.branding.title')}
       </h2>
-      <p className="mt-1 text-stone-500">{t('onboarding.branding.subtitle')}</p>
+      <p className="mt-1 text-stone-500 dark:text-stone-400">{t('onboarding.branding.subtitle')}</p>
 
-      <p className="mt-6 text-sm font-medium text-stone-700">{t('onboarding.branding.accent')}</p>
+      <p className="mt-6 text-sm font-medium text-stone-700 dark:text-stone-300">{t('onboarding.branding.accent')}</p>
       <div className="mt-2 flex flex-wrap gap-2">
         {ACCENT_KEYS.map((key) => (
           <button
@@ -50,18 +50,18 @@ export default function BrandingStep() {
       </div>
 
       <label className="mt-6 flex flex-col gap-1.5">
-        <span className="text-sm font-medium text-stone-700">
+        <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
           {t('onboarding.branding.tagline')}
         </span>
         <input
           value={tagline}
           onChange={(e) => setTagline(e.target.value)}
           placeholder={t('onboarding.branding.taglinePlaceholder')}
-          className="rounded-xl border border-stone-200 px-4 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+          className="rounded-xl border border-stone-200 px-4 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:focus:border-stone-500 dark:focus:ring-stone-700"
         />
       </label>
 
-      <p className="mt-4 text-xs text-stone-400">{t('onboarding.branding.uploadsNote')}</p>
+      <p className="mt-4 text-xs text-stone-400 dark:text-stone-500">{t('onboarding.branding.uploadsNote')}</p>
 
       <div className="mt-8 flex justify-end">
         <Button onClick={next} disabled={saving} accentKey={accentKey}>

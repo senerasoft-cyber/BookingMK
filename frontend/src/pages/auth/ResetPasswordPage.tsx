@@ -35,9 +35,9 @@ export default function ResetPasswordPage() {
   if (!token) {
     return (
       <AuthCard title={t('auth.resetPassword.title')} subtitle={t('auth.resetPassword.subtitle')}>
-        <p className="text-sm text-red-600">{t('auth.resetPassword.missingToken')}</p>
-        <p className="mt-4 text-sm text-stone-500">
-          <Link to="/forgot-password" className="font-medium text-stone-900 underline">
+        <p className="text-sm text-red-600 dark:text-red-400">{t('auth.resetPassword.missingToken')}</p>
+        <p className="mt-4 text-sm text-stone-500 dark:text-stone-400">
+          <Link to="/forgot-password" className="font-medium text-stone-900 underline dark:text-stone-100">
             {t('auth.forgotPassword.title')}
           </Link>
         </p>
@@ -51,10 +51,10 @@ export default function ResetPasswordPage() {
         <TextInput
           label={t('auth.resetPassword.newPassword')}
           type="password"
-          {...register('new_password', { required: true, minLength: 8 })}
+          {...register('new_password', { required: true, minLength: 10, maxLength: 128 })}
           error={errors.new_password && t('auth.register.passwordMinLength')}
         />
-        {serverError && <p className="text-sm text-red-600">{serverError}</p>}
+        {serverError && <p className="text-sm text-red-600 dark:text-red-400">{serverError}</p>}
         <Button type="submit" disabled={isSubmitting} className="mt-2">
           {t('auth.resetPassword.submit')}
         </Button>

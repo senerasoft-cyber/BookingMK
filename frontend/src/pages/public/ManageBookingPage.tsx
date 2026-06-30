@@ -63,33 +63,37 @@ export default function ManageBookingPage() {
   }
 
   if (isPending) {
-    return <div className="flex min-h-screen items-center justify-center text-stone-400">…</div>
+    return (
+      <div className="flex min-h-screen items-center justify-center text-stone-400 dark:bg-stone-950 dark:text-stone-500">
+        …
+      </div>
+    )
   }
   if (isError || !appointment) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-stone-500">
+      <div className="flex min-h-screen items-center justify-center text-stone-500 dark:bg-stone-950 dark:text-stone-400">
         {t('public.manage.notFound')}
       </div>
     )
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-stone-50 px-6">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg shadow-stone-200">
-        <h1 className="font-display text-xl font-semibold text-stone-900">
+    <main className="flex min-h-screen items-center justify-center bg-stone-50 px-6 dark:bg-stone-950">
+      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg shadow-stone-200 dark:bg-stone-900 dark:shadow-none dark:ring-1 dark:ring-stone-800">
+        <h1 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
           {t('public.manage.title')}
         </h1>
 
-        <div className="mt-4 rounded-xl border border-stone-200 p-4">
-          <p className="font-medium text-stone-900">{appointment.service_name}</p>
+        <div className="mt-4 rounded-xl border border-stone-200 p-4 dark:border-stone-700">
+          <p className="font-medium text-stone-900 dark:text-stone-100">{appointment.service_name}</p>
           {appointment.staff_name && (
-            <p className="text-sm text-stone-500">{appointment.staff_name}</p>
+            <p className="text-sm text-stone-500 dark:text-stone-400">{appointment.staff_name}</p>
           )}
-          <p className="mt-1 text-sm text-stone-500">
+          <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
             {appointment.starts_at.slice(0, 10)} · {appointment.starts_at.slice(11, 16)}–
             {appointment.ends_at.slice(11, 16)}
           </p>
-          <p className="mt-2 text-sm font-medium text-stone-700">
+          <p className="mt-2 text-sm font-medium text-stone-700 dark:text-stone-300">
             {t(`public.manage.status.${appointment.status}`)}
           </p>
         </div>
@@ -113,12 +117,12 @@ export default function ManageBookingPage() {
             ) : (
               <div className="flex flex-col gap-2">
                 <label className="flex flex-col gap-1 text-sm">
-                  <span className="text-stone-500">{t('public.manage.newTime')}</span>
+                  <span className="text-stone-500 dark:text-stone-400">{t('public.manage.newTime')}</span>
                   <input
                     type="datetime-local"
                     value={newDate}
                     onChange={(e) => setNewDate(e.target.value)}
-                    className="rounded-lg border border-stone-200 px-2 py-1.5"
+                    className="rounded-lg border border-stone-200 px-2 py-1.5 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
                   />
                 </label>
                 <div className="flex gap-2">
@@ -139,7 +143,7 @@ export default function ManageBookingPage() {
           </div>
         )}
 
-        {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+        {error && <p className="mt-3 text-sm text-red-600 dark:text-red-400">{error}</p>}
       </div>
     </main>
   )

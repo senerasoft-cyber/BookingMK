@@ -40,10 +40,10 @@ export default function StatsPage() {
         : t('common.somethingWentWrong')
     return (
       <div>
-        <h1 className="font-display text-xl font-semibold text-stone-900">
+        <h1 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
           {t('dashboard.stats.title')}
         </h1>
-        <p className="mt-3 rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
+        <p className="mt-3 rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600 dark:border-stone-700 dark:bg-stone-900/40 dark:text-stone-300">
           {message}{' '}
           <a href="/dashboard/billing" className="font-medium underline">
             {t('dashboard.planErrors.upgradeLink')}
@@ -54,67 +54,67 @@ export default function StatsPage() {
   }
 
   if (!stats) {
-    return <div className="text-stone-400">…</div>
+    return <div className="text-stone-400 dark:text-stone-500">…</div>
   }
 
   const maxDay = Math.max(1, ...stats.bookings_by_day.map((d) => d.count))
 
   return (
     <div>
-      <h1 className="font-display text-xl font-semibold text-stone-900">
+      <h1 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('dashboard.stats.title')}
       </h1>
-      <p className="mt-1 text-stone-500">{t('dashboard.stats.subtitle')}</p>
+      <p className="mt-1 text-stone-500 dark:text-stone-400">{t('dashboard.stats.subtitle')}</p>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div className="rounded-xl border border-stone-200 p-4">
-          <p className="text-xs text-stone-500">{t('dashboard.stats.revenue')}</p>
-          <p className="mt-1 text-xl font-semibold text-stone-900">
+        <div className="rounded-xl border border-stone-200 p-4 dark:border-stone-700">
+          <p className="text-xs text-stone-500 dark:text-stone-400">{t('dashboard.stats.revenue')}</p>
+          <p className="mt-1 text-xl font-semibold text-stone-900 dark:text-stone-50">
             {stats.revenue_this_month} {stats.currency}
           </p>
         </div>
-        <div className="rounded-xl border border-stone-200 p-4">
-          <p className="text-xs text-stone-500">{t('dashboard.stats.confirmed')}</p>
-          <p className="mt-1 text-xl font-semibold text-stone-900">{stats.confirmed_this_month}</p>
+        <div className="rounded-xl border border-stone-200 p-4 dark:border-stone-700">
+          <p className="text-xs text-stone-500 dark:text-stone-400">{t('dashboard.stats.confirmed')}</p>
+          <p className="mt-1 text-xl font-semibold text-stone-900 dark:text-stone-50">{stats.confirmed_this_month}</p>
         </div>
-        <div className="rounded-xl border border-stone-200 p-4">
-          <p className="text-xs text-stone-500">{t('dashboard.stats.upcoming')}</p>
-          <p className="mt-1 text-xl font-semibold text-stone-900">{stats.upcoming_count}</p>
+        <div className="rounded-xl border border-stone-200 p-4 dark:border-stone-700">
+          <p className="text-xs text-stone-500 dark:text-stone-400">{t('dashboard.stats.upcoming')}</p>
+          <p className="mt-1 text-xl font-semibold text-stone-900 dark:text-stone-50">{stats.upcoming_count}</p>
         </div>
-        <div className="rounded-xl border border-stone-200 p-4">
-          <p className="text-xs text-stone-500">{t('dashboard.stats.cancellationRate')}</p>
-          <p className="mt-1 text-xl font-semibold text-stone-900">
+        <div className="rounded-xl border border-stone-200 p-4 dark:border-stone-700">
+          <p className="text-xs text-stone-500 dark:text-stone-400">{t('dashboard.stats.cancellationRate')}</p>
+          <p className="mt-1 text-xl font-semibold text-stone-900 dark:text-stone-50">
             {Math.round(stats.cancellation_rate * 100)}%
           </p>
         </div>
       </div>
 
-      <h2 className="mt-8 text-sm font-medium text-stone-700">{t('dashboard.stats.last14Days')}</h2>
+      <h2 className="mt-8 text-sm font-medium text-stone-700 dark:text-stone-300">{t('dashboard.stats.last14Days')}</h2>
       <div className="mt-3 flex items-end gap-1">
         {stats.bookings_by_day.map((day) => (
           <div key={day.date} className="flex flex-1 flex-col items-center gap-1">
             <div
-              className="w-full rounded-t bg-stone-700"
+              className="w-full rounded-t bg-stone-700 dark:bg-stone-400"
               style={{ height: `${Math.max(4, (day.count / maxDay) * 80)}px` }}
               title={`${day.date}: ${day.count}`}
             />
-            <span className="text-[10px] text-stone-400">{day.date.slice(8, 10)}</span>
+            <span className="text-[10px] text-stone-400 dark:text-stone-500">{day.date.slice(8, 10)}</span>
           </div>
         ))}
       </div>
 
-      <h2 className="mt-8 text-sm font-medium text-stone-700">{t('dashboard.stats.topServices')}</h2>
+      <h2 className="mt-8 text-sm font-medium text-stone-700 dark:text-stone-300">{t('dashboard.stats.topServices')}</h2>
       <ul className="mt-3 flex flex-col gap-2">
         {stats.top_services.length === 0 && (
-          <p className="text-sm text-stone-400">{t('dashboard.stats.empty')}</p>
+          <p className="text-sm text-stone-400 dark:text-stone-500">{t('dashboard.stats.empty')}</p>
         )}
         {stats.top_services.map((svc) => (
           <li
             key={svc.name}
-            className="flex items-center justify-between rounded-xl border border-stone-200 p-3"
+            className="flex items-center justify-between rounded-xl border border-stone-200 p-3 dark:border-stone-700"
           >
-            <span className="font-medium text-stone-800">{svc.name}</span>
-            <span className="text-sm text-stone-500">{svc.count}</span>
+            <span className="font-medium text-stone-800 dark:text-stone-200">{svc.name}</span>
+            <span className="text-sm text-stone-500 dark:text-stone-400">{svc.count}</span>
           </li>
         ))}
       </ul>

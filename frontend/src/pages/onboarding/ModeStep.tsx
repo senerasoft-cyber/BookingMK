@@ -40,20 +40,22 @@ export default function ModeStep() {
 
   return (
     <div>
-      <h2 className="font-display text-xl font-semibold text-stone-900">
+      <h2 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('onboarding.mode.title')}
       </h2>
-      <p className="mt-1 text-stone-500">{t('onboarding.mode.subtitle')}</p>
+      <p className="mt-1 text-stone-500 dark:text-stone-400">{t('onboarding.mode.subtitle')}</p>
 
       <div className="mt-6 flex flex-col gap-2">
         {BOOKING_MODES.map((mode) => (
           <label
             key={mode.value}
             className={`flex cursor-pointer flex-col rounded-xl border p-3 ${
-              bookingMode === mode.value ? 'border-stone-400 bg-stone-50' : 'border-stone-200'
+              bookingMode === mode.value
+                ? 'border-stone-400 bg-stone-50 dark:border-stone-500 dark:bg-stone-900/40'
+                : 'border-stone-200 dark:border-stone-700'
             }`}
           >
-            <span className="flex items-center gap-2 font-medium text-stone-800">
+            <span className="flex items-center gap-2 font-medium text-stone-800 dark:text-stone-200">
               <input
                 type="radio"
                 checked={bookingMode === mode.value}
@@ -61,12 +63,12 @@ export default function ModeStep() {
               />
               {t(mode.labelKey)}
             </span>
-            <span className="ml-6 text-sm text-stone-500">{t(mode.descriptionKey)}</span>
+            <span className="ml-6 text-sm text-stone-500 dark:text-stone-400">{t(mode.descriptionKey)}</span>
           </label>
         ))}
       </div>
 
-      <label className="mt-6 flex items-center gap-2 text-sm font-medium text-stone-700">
+      <label className="mt-6 flex items-center gap-2 text-sm font-medium text-stone-700 dark:text-stone-300">
         <input
           type="checkbox"
           checked={requireVerification}
@@ -74,9 +76,9 @@ export default function ModeStep() {
         />
         {t('onboarding.mode.requireVerification')}
       </label>
-      <p className="ml-6 text-sm text-stone-500">{t('onboarding.mode.requireVerificationHint')}</p>
+      <p className="ml-6 text-sm text-stone-500 dark:text-stone-400">{t('onboarding.mode.requireVerificationHint')}</p>
 
-      <label className="mt-4 flex items-center gap-2 text-sm font-medium text-stone-700">
+      <label className="mt-4 flex items-center gap-2 text-sm font-medium text-stone-700 dark:text-stone-300">
         <input
           type="checkbox"
           checked={collectPhone}
@@ -84,7 +86,7 @@ export default function ModeStep() {
         />
         {t('onboarding.mode.collectPhone')}
       </label>
-      <p className="ml-6 text-sm text-stone-500">{t('onboarding.mode.collectPhoneHint')}</p>
+      <p className="ml-6 text-sm text-stone-500 dark:text-stone-400">{t('onboarding.mode.collectPhoneHint')}</p>
 
       <div className="mt-8 flex justify-end">
         <Button onClick={next} disabled={saving} accentKey={business?.accent_key}>

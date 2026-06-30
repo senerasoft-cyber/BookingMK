@@ -1,6 +1,6 @@
 import re
 
-from tests.conftest import register_business
+from tests.conftest import DEFAULT_TEST_PASSWORD, register_business
 
 
 def test_register_creates_business_with_slug_and_default_hours(client):
@@ -21,7 +21,7 @@ def test_register_duplicate_email_fails(client):
     register_business(client)
     response = client.post(
         "/auth/register",
-        json={"email": "owner@example.com", "password": "password123", "business_name": "Other"},
+        json={"email": "owner@example.com", "password": DEFAULT_TEST_PASSWORD, "business_name": "Other"},
     )
     assert response.status_code == 409
 
@@ -35,6 +35,24 @@ def test_register_weak_password_fails(client):
     assert "password" in response.get_json()["errors"]
 
 
+def test_register_common_password_fails(client):
+    response = client.post(
+        "/auth/register",
+        json={"email": "a@b.com", "password": "password1234", "business_name": "Studio"},
+    )
+    assert response.status_code == 400
+    assert "password" in response.get_json()["errors"]
+
+
+def test_register_password_containing_email_fails(client):
+    response = client.post(
+        "/auth/register",
+        json={"email": "skopjebarber@example.com", "password": "skopjebarber99", "business_name": "Studio"},
+    )
+    assert response.status_code == 400
+    assert "password" in response.get_json()["errors"]
+
+
 def test_duplicate_business_name_gets_unique_slug(client):
     register_business(client, email="a@example.com", business_name="Studio Linija")
     second = register_business(client, email="b@example.com", business_name="Studio Linija")
@@ -43,7 +61,7 @@ def test_duplicate_business_name_gets_unique_slug(client):
 
 def test_login_success(client):
     register_business(client)
-    credentials = {"email": "owner@example.com", "password": "password123"}
+    credentials = {"email": "owner@example.com", "password": DEFAULT_TEST_PASSWORD}
     response = client.post("/auth/login", json=credentials)
     assert response.status_code == 200
     assert "access_token" in response.get_json()
@@ -85,7 +103,7 @@ def test_login_locks_out_after_too_many_failed_attempts(client):
         assert response.status_code == 401
 
     locked = client.post(
-        "/auth/login", json={"email": "owner@example.com", "password": "password123"}
+        "/auth/login", json={"email": "owner@example.com", "password": DEFAULT_TEST_PASSWORD}
     )
     assert locked.status_code == 429
 
@@ -97,7 +115,7 @@ def test_successful_login_resets_attempt_counter(client):
         client.post("/auth/login", json=wrong)
 
     right = client.post(
-        "/auth/login", json={"email": "owner@example.com", "password": "password123"}
+        "/auth/login", json={"email": "owner@example.com", "password": DEFAULT_TEST_PASSWORD}
     )
     assert right.status_code == 200
 
@@ -123,7 +141,7 @@ def test_password_reset_flow(client, capsys):
     assert confirm.status_code == 200
 
     old_login = client.post(
-        "/auth/login", json={"email": "owner@example.com", "password": "password123"}
+        "/auth/login", json={"email": "owner@example.com", "password": DEFAULT_TEST_PASSWORD}
     )
     assert old_login.status_code == 401
 

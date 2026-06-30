@@ -156,3 +156,34 @@ def plan_serialized(plan_id: str | None) -> dict | None:
     if plan_id is None:
         return None
     return PLANS_BY_ID.get(plan_id)
+
+
+# Self-serve trial: no card collected, so unlike a Paddle subscription it
+# can't auto-charge when it ends -- current_period_end simply lapses and
+# is_subscription_active() above self-heals it to "canceled" same as any
+# other expired period. TRIAL_PLAN_ID is Top so the trial shows the full
+# product, not a feature-gated slice of it.
+TRIAL_PLAN_ID = "top"
+TRIAL_DURATION_DAYS = 7
+
+
+class TrialError(Exception):
+    def __init__(self, error_code: str):
+        self.error_code = error_code
+        super().__init__(error_code)
+
+
+def start_trial(business) -> None:
+    """Raises TrialError("trial_already_used") if this business has already
+    had a trial -- trial_started_at is set once below and never cleared."""
+    if business.trial_started_at is not None:
+        raise TrialError("trial_already_used")
+
+    business.trial_started_at = utcnow()
+    business.plan_id = TRIAL_PLAN_ID
+    business.subscription_status = "active"
+    business.subscription_provider = "trial"
+    business.subscription_id = None
+    business.subscription_customer_id = None
+    business.current_period_end = utcnow() + timedelta(days=TRIAL_DURATION_DAYS)
+    db.session.commit()

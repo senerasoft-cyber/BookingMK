@@ -35,6 +35,7 @@ export interface Business {
   subscription_status: SubscriptionStatus
   subscription_provider: string | null
   current_period_end: string | null
+  trial_started_at: string | null
   onboarding_step: number
   onboarding_completed_at: string | null
 }

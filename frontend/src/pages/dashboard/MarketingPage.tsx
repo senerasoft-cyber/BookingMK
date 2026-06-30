@@ -78,10 +78,10 @@ export default function MarketingPage() {
         : t('dashboard.planErrors.upgradeLink')
     return (
       <div>
-        <h1 className="font-display text-xl font-semibold text-stone-900">
+        <h1 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
           {t('dashboard.marketing.title')}
         </h1>
-        <p className="mt-3 rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
+        <p className="mt-3 rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600 dark:border-stone-700 dark:bg-stone-900/40 dark:text-stone-300">
           {message}{' '}
           <a href={linkHref} className="font-medium underline">
             {linkLabel}
@@ -93,12 +93,12 @@ export default function MarketingPage() {
 
   return (
     <div>
-      <h1 className="font-display text-xl font-semibold text-stone-900">
+      <h1 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('dashboard.marketing.title')}
       </h1>
-      <p className="mt-1 text-stone-500">{t('dashboard.marketing.subtitle')}</p>
+      <p className="mt-1 text-stone-500 dark:text-stone-400">{t('dashboard.marketing.subtitle')}</p>
       {business?.loyalty_enabled && (
-        <p className="mt-2 text-xs text-stone-400">
+        <p className="mt-2 text-xs text-stone-400 dark:text-stone-500">
           {t('dashboard.marketing.loyaltyActive', { n: business.loyalty_every_n })}
         </p>
       )}
@@ -107,26 +107,26 @@ export default function MarketingPage() {
         {vouchers?.map((voucher) => (
           <div
             key={voucher.id}
-            className="flex items-center justify-between gap-2 rounded-xl border border-stone-200 p-3"
+            className="flex items-center justify-between gap-2 rounded-xl border border-stone-200 p-3 dark:border-stone-700"
           >
             <div>
-              <p className="font-medium text-stone-900">
+              <p className="font-medium text-stone-900 dark:text-stone-50">
                 {voucher.client_name ?? t('dashboard.marketing.unknownClient')}
               </p>
-              <p className="text-sm text-stone-500">
+              <p className="text-sm text-stone-500 dark:text-stone-400">
                 {voucher.kind === 'free'
                   ? t('dashboard.marketing.freeBooking')
                   : t('dashboard.marketing.percentOff', { percent: voucher.percent_off })}
                 {voucher.source === 'loyalty' && ` · ${t('dashboard.marketing.loyaltySource')}`}
               </p>
-              <p className="font-mono text-xs text-stone-400">{voucher.code}</p>
+              <p className="font-mono text-xs text-stone-400 dark:text-stone-500">{voucher.code}</p>
             </div>
             <div className="flex items-center gap-2">
               <span
                 className={`rounded-full px-2.5 py-1 text-xs font-medium ${
                   voucher.consumed_at
-                    ? 'bg-stone-100 text-stone-500'
-                    : 'bg-emerald-100 text-emerald-700'
+                    ? 'bg-stone-100 text-stone-500 dark:bg-stone-800 dark:text-stone-400'
+                    : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400'
                 }`}
               >
                 {voucher.consumed_at
@@ -137,7 +137,7 @@ export default function MarketingPage() {
                 <button
                   type="button"
                   onClick={() => remove(voucher.id)}
-                  className="text-xs font-medium text-stone-400 underline hover:text-red-600"
+                  className="text-xs font-medium text-stone-400 underline hover:text-red-600 dark:text-stone-500 dark:hover:text-red-400"
                 >
                   {t('dashboard.marketing.revoke')}
                 </button>
@@ -146,19 +146,19 @@ export default function MarketingPage() {
           </div>
         ))}
         {vouchers && vouchers.length === 0 && (
-          <p className="text-stone-400">{t('dashboard.marketing.empty')}</p>
+          <p className="text-stone-400 dark:text-stone-500">{t('dashboard.marketing.empty')}</p>
         )}
       </div>
 
-      <h2 className="mt-8 font-medium text-stone-700">{t('dashboard.marketing.grantVoucher')}</h2>
-      <p className="text-xs text-stone-400">{t('dashboard.marketing.grantHint')}</p>
+      <h2 className="mt-8 font-medium text-stone-700 dark:text-stone-300">{t('dashboard.marketing.grantVoucher')}</h2>
+      <p className="text-xs text-stone-400 dark:text-stone-500">{t('dashboard.marketing.grantHint')}</p>
       <div className="mt-3 flex flex-wrap items-end gap-3">
         <label className="flex flex-col gap-1.5 text-sm">
-          <span className="font-medium text-stone-700">{t('dashboard.marketing.client')}</span>
+          <span className="font-medium text-stone-700 dark:text-stone-300">{t('dashboard.marketing.client')}</span>
           <select
             value={clientId}
             onChange={(e) => setClientId(e.target.value ? Number(e.target.value) : '')}
-            className="rounded-xl border border-stone-200 px-3 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+            className="rounded-xl border border-stone-200 px-3 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:focus:border-stone-500 dark:focus:ring-stone-700"
           >
             <option value="">{t('dashboard.marketing.selectClient')}</option>
             {clients?.map((c) => (
@@ -169,11 +169,11 @@ export default function MarketingPage() {
           </select>
         </label>
         <label className="flex flex-col gap-1.5 text-sm">
-          <span className="font-medium text-stone-700">{t('dashboard.marketing.voucherKind')}</span>
+          <span className="font-medium text-stone-700 dark:text-stone-300">{t('dashboard.marketing.voucherKind')}</span>
           <select
             value={kind}
             onChange={(e) => setKind(e.target.value as VoucherKind)}
-            className="rounded-xl border border-stone-200 px-3 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+            className="rounded-xl border border-stone-200 px-3 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:focus:border-stone-500 dark:focus:ring-stone-700"
           >
             <option value="free">{t('dashboard.marketing.freeBooking')}</option>
             <option value="percent_off">{t('dashboard.marketing.percentOffOption')}</option>
@@ -181,7 +181,7 @@ export default function MarketingPage() {
         </label>
         {kind === 'percent_off' && (
           <label className="flex flex-col gap-1.5 text-sm">
-            <span className="font-medium text-stone-700">
+            <span className="font-medium text-stone-700 dark:text-stone-300">
               {t('dashboard.marketing.percentOffLabel')}
             </span>
             <input
@@ -190,7 +190,7 @@ export default function MarketingPage() {
               max={100}
               value={percentOff}
               onChange={(e) => setPercentOff(Number(e.target.value))}
-              className="w-24 rounded-xl border border-stone-200 px-3 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+              className="w-24 rounded-xl border border-stone-200 px-3 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:focus:border-stone-500 dark:focus:ring-stone-700"
             />
           </label>
         )}
@@ -203,7 +203,7 @@ export default function MarketingPage() {
           {t('dashboard.marketing.grantAction')}
         </Button>
       </div>
-      {serverError && <p className="mt-2 text-sm text-red-600">{serverError}</p>}
+      {serverError && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{serverError}</p>}
     </div>
   )
 }

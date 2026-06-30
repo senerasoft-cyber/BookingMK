@@ -16,10 +16,10 @@ const FEATURE_KEYS: { key: keyof Plan; labelKey: string }[] = [
 ]
 
 const STATUS_BADGE: Record<string, string> = {
-  active: 'bg-emerald-100 text-emerald-700',
-  past_due: 'bg-amber-100 text-amber-700',
-  canceled: 'bg-stone-100 text-stone-500',
-  none: 'bg-stone-100 text-stone-500',
+  active: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400',
+  past_due: 'bg-amber-100 text-amber-700 dark:bg-amber-950/30 dark:text-amber-300',
+  canceled: 'bg-stone-100 text-stone-500 dark:bg-stone-800 dark:text-stone-400',
+  none: 'bg-stone-100 text-stone-500 dark:bg-stone-800 dark:text-stone-400',
 }
 
 function promoErrorMessage(t: (key: string) => string, err: unknown): string {
@@ -52,7 +52,7 @@ function PromoCodeForm({ onRedeemed }: { onRedeemed: () => void }) {
   }
 
   return (
-    <div className="mt-4 flex flex-wrap items-end gap-2 rounded-xl border border-dashed border-stone-300 p-3">
+    <div className="mt-4 flex flex-wrap items-end gap-2 rounded-xl border border-dashed border-stone-300 p-3 dark:border-stone-700">
       <TextInput
         label={t('dashboard.billing.promoCode')}
         value={code}
@@ -62,7 +62,7 @@ function PromoCodeForm({ onRedeemed }: { onRedeemed: () => void }) {
       <Button type="button" variant="secondary" onClick={redeem} disabled={busy || !code}>
         {t('dashboard.billing.promoRedeem')}
       </Button>
-      {error && <p className="w-full text-sm text-red-600">{error}</p>}
+      {error && <p className="w-full text-sm text-red-600 dark:text-red-400">{error}</p>}
     </div>
   )
 }
@@ -112,37 +112,49 @@ export default function BillingPage() {
   }
 
   const isPromo = business?.subscription_provider === 'promo'
+  const isTrial = business?.subscription_provider === 'trial'
 
   return (
     <div>
-      <h1 className="font-display text-xl font-semibold text-stone-900">
+      <h1 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('dashboard.billing.title')}
       </h1>
-      <p className="mt-1 text-stone-500">{t('dashboard.billing.subtitle')}</p>
+      <p className="mt-1 text-stone-500 dark:text-stone-400">{t('dashboard.billing.subtitle')}</p>
 
       {business && (
-        <div className="mt-4 flex items-center gap-3 rounded-xl border border-stone-200 p-3">
+        <div className="mt-4 flex items-center gap-3 rounded-xl border border-stone-200 p-3 dark:border-stone-700">
           <span
             className={`rounded-full px-2.5 py-1 text-xs font-medium ${
-              isPromo ? 'bg-violet-100 text-violet-700' : STATUS_BADGE[business.subscription_status]
+              isPromo
+                ? 'bg-violet-100 text-violet-700 dark:bg-violet-950/30 dark:text-violet-400'
+                : isTrial
+                  ? 'bg-sky-100 text-sky-700 dark:bg-sky-950/30 dark:text-sky-400'
+                  : STATUS_BADGE[business.subscription_status]
             }`}
           >
             {isPromo
               ? t('dashboard.billing.status.promo')
-              : t(`dashboard.billing.status.${business.subscription_status}`)}
+              : isTrial
+                ? t('dashboard.billing.status.trial')
+                : t(`dashboard.billing.status.${business.subscription_status}`)}
           </span>
           {business.current_period_end && (
-            <span className="text-sm text-stone-500">
-              {t(isPromo ? 'dashboard.billing.promoEndsOn' : 'dashboard.billing.renewsOn', {
-                date: business.current_period_end.slice(0, 10),
-              })}
+            <span className="text-sm text-stone-500 dark:text-stone-400">
+              {t(
+                isPromo
+                  ? 'dashboard.billing.promoEndsOn'
+                  : isTrial
+                    ? 'dashboard.billing.trialEndsOn'
+                    : 'dashboard.billing.renewsOn',
+                { date: business.current_period_end.slice(0, 10) },
+              )}
             </span>
           )}
-          {business.subscription_status === 'active' && !isPromo && (
+          {business.subscription_status === 'active' && !isPromo && !isTrial && (
             <button
               type="button"
               onClick={cancel}
-              className="ml-auto text-sm font-medium text-stone-500 hover:text-red-600"
+              className="ml-auto text-sm font-medium text-stone-500 hover:text-red-600 dark:text-stone-400 dark:hover:text-red-400"
             >
               {t('dashboard.billing.cancel')}
             </button>
@@ -152,24 +164,24 @@ export default function BillingPage() {
 
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
         {plans?.map((plan) => (
-          <div key={plan.id} className="flex flex-col rounded-2xl border border-stone-200 p-4">
-            <h3 className="font-display text-lg font-semibold text-stone-900">{plan.name}</h3>
-            <p className="mt-1 text-2xl font-semibold text-stone-900">
+          <div key={plan.id} className="flex flex-col rounded-2xl border border-stone-200 p-4 dark:border-stone-700">
+            <h3 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">{plan.name}</h3>
+            <p className="mt-1 text-2xl font-semibold text-stone-900 dark:text-stone-50">
               €{plan.price_eur_monthly}
-              <span className="text-sm font-normal text-stone-500">
+              <span className="text-sm font-normal text-stone-500 dark:text-stone-400">
                 {t('onboarding.billing.perMonth')}
               </span>
             </p>
-            <p className="mt-2 text-sm text-stone-500">
+            <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
               {plan.max_staff === null
                 ? t('onboarding.billing.unlimitedStaff')
                 : t('onboarding.billing.maxStaff', { count: plan.max_staff })}
             </p>
-            <ul className="mt-3 flex flex-col gap-1.5 text-sm text-stone-600">
+            <ul className="mt-3 flex flex-col gap-1.5 text-sm text-stone-600 dark:text-stone-300">
               {FEATURE_KEYS.map(({ key, labelKey }) =>
                 plan[key] ? (
                   <li key={key} className="flex items-center gap-1.5">
-                    <Check size={14} className="text-emerald-600" />
+                    <Check size={14} className="text-emerald-600 dark:text-emerald-400" />
                     {t(labelKey)}
                   </li>
                 ) : null,
@@ -182,7 +194,7 @@ export default function BillingPage() {
                 busyPlan !== null ||
                 (business?.plan_id === plan.id && business.subscription_status === 'active')
               }
-              className="mt-4 rounded-xl bg-stone-800 px-4 py-2.5 font-medium text-white disabled:opacity-50"
+              className="mt-4 rounded-xl bg-stone-800 px-4 py-2.5 font-medium text-white disabled:opacity-50 dark:bg-stone-700 dark:hover:bg-stone-600"
             >
               {business?.plan_id === plan.id && business.subscription_status === 'active'
                 ? t('onboarding.billing.current')
@@ -192,7 +204,7 @@ export default function BillingPage() {
         ))}
       </div>
 
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-4 text-sm text-red-600 dark:text-red-400">{error}</p>}
 
       <PromoCodeForm onRedeemed={refreshBusiness} />
     </div>

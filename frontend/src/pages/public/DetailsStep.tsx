@@ -75,7 +75,7 @@ export default function DetailsStep({
 
   return (
     <div>
-      <h2 className="font-display text-xl font-semibold text-stone-900">
+      <h2 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('public.details.title')}
       </h2>
       <form className="mt-4 flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
@@ -108,7 +108,7 @@ export default function DetailsStep({
           />
         )}
         <TurnstileWidget onVerify={setTurnstileToken} />
-        {serverError && <p className="text-sm text-red-600">{serverError}</p>}
+        {serverError && <p className="text-sm text-red-600 dark:text-red-400">{serverError}</p>}
         <div className="mt-2 flex gap-3">
           <Button type="button" variant="secondary" onClick={onBack}>
             {t('public.details.back')}

@@ -4,7 +4,7 @@ from flask import Blueprint, g, jsonify, request
 from sqlalchemy.exc import IntegrityError
 
 from app.auth import hash_password, jwt_required, verify_password
-from app.billing import get_billing_provider
+from app.billing import TrialError, get_billing_provider, start_trial
 from app.business_types import BUSINESS_TYPES_BY_ID
 from app.email_sender import get_email_sender
 from app.extensions import db
@@ -147,6 +147,9 @@ def serialize_business(business):
         "subscription_provider": business.subscription_provider,
         "current_period_end": (
             business.current_period_end.isoformat() if business.current_period_end else None
+        ),
+        "trial_started_at": (
+            business.trial_started_at.isoformat() if business.trial_started_at else None
         ),
         "onboarding_step": business.onboarding_step,
         "onboarding_completed_at": (
@@ -376,6 +379,17 @@ def redeem_promo():
     try:
         redeem_promo_code(g.current_business, payload.code)
     except PromoCodeError as exc:
+        return jsonify({"error": exc.error_code}), 400
+
+    return jsonify(serialize_business(g.current_business))
+
+
+@owner_bp.post("/me/subscription/start-trial")
+@jwt_required
+def start_subscription_trial():
+    try:
+        start_trial(g.current_business)
+    except TrialError as exc:
         return jsonify({"error": exc.error_code}), 400
 
     return jsonify(serialize_business(g.current_business))

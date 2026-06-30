@@ -58,19 +58,19 @@ export default function LoginPage() {
           {...register('password', { required: true })}
           error={errors.password && t('common.required')}
         />
-        {serverError && <p className="text-sm text-red-600">{serverError}</p>}
+        {serverError && <p className="text-sm text-red-600 dark:text-red-400">{serverError}</p>}
         <Button type="submit" disabled={isSubmitting} className="mt-2">
           {t('auth.login.submit')}
         </Button>
       </form>
-      <p className="mt-3 text-sm text-stone-500">
-        <Link to="/forgot-password" className="font-medium text-stone-900 underline">
+      <p className="mt-3 text-sm text-stone-500 dark:text-stone-400">
+        <Link to="/forgot-password" className="font-medium text-stone-900 underline dark:text-stone-100">
           {t('auth.login.forgotPassword')}
         </Link>
       </p>
-      <p className="mt-4 text-sm text-stone-500">
+      <p className="mt-4 text-sm text-stone-500 dark:text-stone-400">
         {t('auth.login.noAccount')}{' '}
-        <Link to="/register" className="font-medium text-stone-900 underline">
+        <Link to="/register" className="font-medium text-stone-900 underline dark:text-stone-100">
           {t('auth.login.registerLink')}
         </Link>
       </p>

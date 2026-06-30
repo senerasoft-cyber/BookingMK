@@ -44,21 +44,21 @@ export default function HoursStep() {
 
   return (
     <div>
-      <h2 className="font-display text-xl font-semibold text-stone-900">
+      <h2 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('onboarding.hours.title')}
       </h2>
-      <p className="mt-1 text-stone-500">{t('onboarding.hours.subtitle')}</p>
+      <p className="mt-1 text-stone-500 dark:text-stone-400">{t('onboarding.hours.subtitle')}</p>
 
       <div className="mt-6 flex flex-col gap-2">
         {hours?.map((hour) => (
           <div
             key={hour.weekday}
-            className="flex items-center gap-3 rounded-xl border border-stone-200 p-3"
+            className="flex items-center gap-3 rounded-xl border border-stone-200 p-3 dark:border-stone-700"
           >
-            <span className="w-24 text-sm font-medium text-stone-700">
+            <span className="w-24 text-sm font-medium text-stone-700 dark:text-stone-300">
               {t(`onboarding.hours.weekdays.${hour.weekday}`)}
             </span>
-            <label className="flex items-center gap-1.5 text-xs text-stone-500">
+            <label className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400">
               <input
                 type="checkbox"
                 checked={!hour.is_closed}
@@ -74,16 +74,16 @@ export default function HoursStep() {
                   onChange={(e) =>
                     updateDay(hour.weekday, { open_minute: timeInputToMinutes(e.target.value) })
                   }
-                  className="rounded-lg border border-stone-200 px-2 py-1 text-sm"
+                  className="rounded-lg border border-stone-200 px-2 py-1 text-sm dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
                 />
-                <span className="text-stone-400">–</span>
+                <span className="text-stone-400 dark:text-stone-500">–</span>
                 <input
                   type="time"
                   value={minutesToTimeInput(hour.close_minute)}
                   onChange={(e) =>
                     updateDay(hour.weekday, { close_minute: timeInputToMinutes(e.target.value) })
                   }
-                  className="rounded-lg border border-stone-200 px-2 py-1 text-sm"
+                  className="rounded-lg border border-stone-200 px-2 py-1 text-sm dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
                 />
               </>
             )}

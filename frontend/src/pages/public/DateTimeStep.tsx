@@ -41,7 +41,7 @@ export default function DateTimeStep({
 
   return (
     <div>
-      <h2 className="font-display text-xl font-semibold text-stone-900">
+      <h2 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('public.datetime.title')}
       </h2>
 
@@ -55,7 +55,9 @@ export default function DateTimeStep({
               type="button"
               onClick={() => setSelectedDate(key)}
               className={`shrink-0 rounded-xl px-3 py-2 text-sm font-medium ${
-                selected ? `${accent.main} ${accent.mainText}` : 'bg-stone-100 text-stone-600'
+                selected
+                  ? `${accent.main} ${accent.mainText}`
+                  : 'bg-stone-100 text-stone-600 dark:bg-stone-800 dark:text-stone-300'
               }`}
             >
               {dayFormatter.format(day)}
@@ -70,14 +72,14 @@ export default function DateTimeStep({
             key={slot}
             type="button"
             onClick={() => onSelectSlot(slot)}
-            className="rounded-xl border border-stone-200 px-3 py-2 text-sm font-medium text-stone-700 hover:border-stone-300"
+            className="rounded-xl border border-stone-200 px-3 py-2 text-sm font-medium text-stone-700 hover:border-stone-300 dark:border-stone-700 dark:text-stone-300 dark:hover:border-stone-600"
           >
             {formatTimeFromIso(slot)}
           </button>
         ))}
       </div>
       {data && data.slots.length === 0 && (
-        <p className="mt-4 text-stone-400">{t('public.datetime.noSlots')}</p>
+        <p className="mt-4 text-stone-400 dark:text-stone-500">{t('public.datetime.noSlots')}</p>
       )}
 
       <div className="mt-8">

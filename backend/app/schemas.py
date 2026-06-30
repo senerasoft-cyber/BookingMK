@@ -17,9 +17,44 @@ def parse(schema_cls: type[BaseModel], data: dict):
         return None, errors
 
 
+# Length over forced complexity (uppercase/digit/symbol rules push people toward
+# predictable patterns like "Password1!") follows current NIST guidance. The
+# frontend enforces the same minimum for real-time feedback during signup; this
+# is the defense-in-depth backstop for anyone hitting the API directly.
+MIN_PASSWORD_LENGTH = 10
+MAX_PASSWORD_LENGTH = 128
+
+# A short list of the most common leaked/trivial passwords -- not exhaustive,
+# just enough to block the obvious "password1234"-style choices that pass a
+# bare length check but offer no real protection.
+COMMON_PASSWORDS = {
+    "password", "password1", "password12", "password123", "password1234",
+    "12345678", "123456789", "1234567890", "0123456789",
+    "qwertyuiop", "qwerty123", "qwerty1234",
+    "letmein123", "welcome123", "admin12345", "iloveyou123",
+    "11111111", "111111111", "00000000", "123123123", "12341234",
+    "abc123456", "abcd1234", "passw0rd1", "p@ssw0rd1",
+    "monkey1234", "dragon1234", "football123", "baseball123",
+    "sunshine123", "princess123", "starwars123", "trustno1234",
+    "changeme123", "whatever123", "freedom123", "superman123",
+}
+
+
+def is_common_password(password: str) -> bool:
+    return password.lower() in COMMON_PASSWORDS
+
+
+def password_contains(password: str, fragment: str) -> bool:
+    """True if `fragment` (e.g. the local part of an email) is a meaningful
+    substring of `password` -- ignores fragments too short to be specific
+    enough to bother blocking (e.g. a 2-3 char email local part)."""
+    fragment = fragment.lower()
+    return len(fragment) >= 4 and fragment in password.lower()
+
+
 class RegisterSchema(BaseModel):
     email: EmailStr
-    password: str = Field(min_length=8)
+    password: str = Field(min_length=MIN_PASSWORD_LENGTH, max_length=MAX_PASSWORD_LENGTH)
     business_name: str = Field(min_length=1, max_length=255)
     turnstile_token: Optional[str] = None
 
@@ -44,7 +79,7 @@ class PasswordResetRequestSchema(BaseModel):
 
 class PasswordResetConfirmSchema(BaseModel):
     token: str
-    new_password: str = Field(min_length=8)
+    new_password: str = Field(min_length=MIN_PASSWORD_LENGTH, max_length=MAX_PASSWORD_LENGTH)
 
 
 class BusinessUpdateSchema(BaseModel):

@@ -35,13 +35,13 @@ export default function TypeStep() {
 
   return (
     <div>
-      <h2 className="font-display text-xl font-semibold text-stone-900">
+      <h2 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('onboarding.type.title')}
       </h2>
-      <p className="mt-1 text-stone-500">{t('onboarding.type.subtitle')}</p>
+      <p className="mt-1 text-stone-500 dark:text-stone-400">{t('onboarding.type.subtitle')}</p>
 
       {isPending ? (
-        <p className="mt-6 text-stone-400">{t('common.loading')}</p>
+        <p className="mt-6 text-stone-400 dark:text-stone-500">{t('common.loading')}</p>
       ) : (
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
           {types?.map((type) => {
@@ -57,13 +57,13 @@ export default function TypeStep() {
                 className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition disabled:opacity-50 ${
                   selected
                     ? `border-transparent ${accent.soft}`
-                    : 'border-stone-200 bg-white hover:border-stone-300'
+                    : 'border-stone-200 bg-white hover:border-stone-300 dark:border-stone-700 dark:bg-stone-900 dark:hover:border-stone-600'
                 }`}
               >
                 <span className={`rounded-full p-2 ${accent.soft} ${accent.softText}`}>
                   <Icon size={20} />
                 </span>
-                <span className="text-sm font-medium text-stone-700">
+                <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
                   {isEnglish ? type.label_en : type.label_mk}
                 </span>
               </button>

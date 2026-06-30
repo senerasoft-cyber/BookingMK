@@ -118,6 +118,10 @@ class Business(db.Model):
     subscription_customer_id = db.Column(db.String(128), nullable=True)
     subscription_id = db.Column(db.String(128), nullable=True)
     current_period_end = db.Column(db.DateTime(timezone=True), nullable=True)
+    # Set once, the first time this business starts a self-serve free trial,
+    # and never cleared again -- the guard against re-triggering a trial by
+    # cancelling/downgrading back to "none".
+    trial_started_at = db.Column(db.DateTime(timezone=True), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), default=utcnow, nullable=False)
     # Public page content -- all optional and shown only when set, so there's
     # no separate "enabled" toggle per section: clearing the field/list is how

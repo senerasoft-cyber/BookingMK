@@ -17,9 +17,9 @@ type StatusFilter = 'all' | AppointmentStatus
 type ViewMode = 'list' | 'calendar'
 
 const STATUS_BADGE: Record<string, string> = {
-  pending: 'bg-amber-100 text-amber-700',
-  confirmed: 'bg-emerald-100 text-emerald-700',
-  cancelled: 'bg-stone-100 text-stone-500',
+  pending: 'bg-amber-100 text-amber-700 dark:bg-amber-950/30 dark:text-amber-300',
+  confirmed: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400',
+  cancelled: 'bg-stone-100 text-stone-500 dark:bg-stone-800 dark:text-stone-400',
 }
 
 const STATUS_LABEL_KEYS: Record<string, string> = {
@@ -88,17 +88,17 @@ function AddAppointmentForm({
   }
 
   return (
-    <div className="mt-3 flex flex-col gap-3 rounded-xl border border-stone-200 p-4">
+    <div className="mt-3 flex flex-col gap-3 rounded-xl border border-stone-200 p-4 dark:border-stone-700">
       {staff.length > 1 && !defaultStaffId && (
         <label className="flex flex-col gap-1 text-sm">
-          <span className="text-stone-500">{t('dashboard.agenda.staffLabel')}</span>
+          <span className="text-stone-500 dark:text-stone-400">{t('dashboard.agenda.staffLabel')}</span>
           <select
             value={staffId ?? ''}
             onChange={(e) => {
               setStaffId(Number(e.target.value))
               setServiceId(undefined)
             }}
-            className="rounded-lg border border-stone-200 px-2 py-1.5"
+            className="rounded-lg border border-stone-200 px-2 py-1.5 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
           >
             {staff.map((member) => (
               <option key={member.id} value={member.id}>
@@ -110,11 +110,11 @@ function AddAppointmentForm({
       )}
 
       <label className="flex flex-col gap-1 text-sm">
-        <span className="text-stone-500">{t('dashboard.agenda.serviceLabel')}</span>
+        <span className="text-stone-500 dark:text-stone-400">{t('dashboard.agenda.serviceLabel')}</span>
         <select
           value={serviceId ?? ''}
           onChange={(e) => setServiceId(Number(e.target.value))}
-          className="rounded-lg border border-stone-200 px-2 py-1.5"
+          className="rounded-lg border border-stone-200 px-2 py-1.5 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
         >
           <option value="" disabled>
             {t('dashboard.agenda.servicePlaceholder')}
@@ -128,45 +128,45 @@ function AddAppointmentForm({
       </label>
 
       <label className="flex flex-col gap-1 text-sm">
-        <span className="text-stone-500">{t('dashboard.agenda.startsAtLabel')}</span>
+        <span className="text-stone-500 dark:text-stone-400">{t('dashboard.agenda.startsAtLabel')}</span>
         <input
           type="datetime-local"
           value={startsAt}
           onChange={(e) => setStartsAt(e.target.value)}
-          className="rounded-lg border border-stone-200 px-2 py-1.5"
+          className="rounded-lg border border-stone-200 px-2 py-1.5 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
         />
       </label>
 
       <div className="flex gap-2">
         <label className="flex flex-1 flex-col gap-1 text-sm">
-          <span className="text-stone-500">{t('public.details.name')}</span>
+          <span className="text-stone-500 dark:text-stone-400">{t('public.details.name')}</span>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="rounded-lg border border-stone-200 px-2 py-1.5"
+            className="rounded-lg border border-stone-200 px-2 py-1.5 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
           />
         </label>
         <label className="flex flex-1 flex-col gap-1 text-sm">
-          <span className="text-stone-500">{t('public.details.email')}</span>
+          <span className="text-stone-500 dark:text-stone-400">{t('public.details.email')}</span>
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder={t('public.details.emailPlaceholder')}
-            className="rounded-lg border border-stone-200 px-2 py-1.5"
+            className="rounded-lg border border-stone-200 px-2 py-1.5 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
           />
         </label>
         <label className="flex flex-1 flex-col gap-1 text-sm">
-          <span className="text-stone-500">{t('public.details.phone')}</span>
+          <span className="text-stone-500 dark:text-stone-400">{t('public.details.phone')}</span>
           <input
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder={t('public.details.phonePlaceholder')}
-            className="rounded-lg border border-stone-200 px-2 py-1.5"
+            className="rounded-lg border border-stone-200 px-2 py-1.5 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
           />
         </label>
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
 
       <div className="flex gap-2">
         <Button type="button" variant="secondary" onClick={onClose}>
@@ -220,15 +220,15 @@ function MoveAppointmentForm({
   }
 
   return (
-    <div className="mt-2 flex flex-wrap items-end gap-2 rounded-lg bg-stone-50 p-2.5">
+    <div className="mt-2 flex flex-wrap items-end gap-2 rounded-lg bg-stone-50 p-2.5 dark:bg-stone-900/40">
       <input
         type="datetime-local"
         value={startsAt}
         onChange={(e) => setStartsAt(e.target.value)}
-        className="rounded-lg border border-stone-200 px-2 py-1 text-sm"
+        className="rounded-lg border border-stone-200 px-2 py-1 text-sm dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
       />
       <label
-        className={`flex items-center gap-1.5 text-xs ${canAutoNotify ? 'text-stone-500' : 'text-stone-300'}`}
+        className={`flex items-center gap-1.5 text-xs ${canAutoNotify ? 'text-stone-500 dark:text-stone-400' : 'text-stone-300 dark:text-stone-600'}`}
         title={canAutoNotify ? undefined : t('dashboard.planErrors.requiresTop')}
       >
         <input
@@ -244,18 +244,18 @@ function MoveAppointmentForm({
         type="button"
         onClick={submit}
         disabled={busy}
-        className="rounded-lg bg-stone-800 px-3 py-1 text-sm font-medium text-white"
+        className="rounded-lg bg-stone-800 px-3 py-1 text-sm font-medium text-white dark:bg-stone-700 dark:hover:bg-stone-600"
       >
         {t('dashboard.agenda.confirmMove')}
       </button>
       <button
         type="button"
         onClick={onClose}
-        className="rounded-lg px-3 py-1 text-sm font-medium text-stone-500 hover:bg-stone-100"
+        className="rounded-lg px-3 py-1 text-sm font-medium text-stone-500 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
       >
         {t('public.datetime.back')}
       </button>
-      {error && <p className="w-full text-sm text-red-600">{error}</p>}
+      {error && <p className="w-full text-sm text-red-600 dark:text-red-400">{error}</p>}
     </div>
   )
 }
@@ -323,10 +323,10 @@ export default function AgendaPage() {
     <div>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="font-display text-xl font-semibold text-stone-900">
+          <h1 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
             {t('dashboard.agenda.title')}
           </h1>
-          <p className="mt-1 text-stone-500">{t('dashboard.agenda.subtitle')}</p>
+          <p className="mt-1 text-stone-500 dark:text-stone-400">{t('dashboard.agenda.subtitle')}</p>
         </div>
         <button
           type="button"
@@ -352,27 +352,27 @@ export default function AgendaPage() {
 
       <div className="mt-4 flex flex-wrap items-end gap-3">
         <label className="flex flex-col gap-1 text-sm">
-          <span className="text-stone-500">{t('dashboard.agenda.dateFrom')}</span>
+          <span className="text-stone-500 dark:text-stone-400">{t('dashboard.agenda.dateFrom')}</span>
           <input
             type="date"
             value={dateFrom}
             onChange={(e) => setDateFrom(e.target.value)}
-            className="rounded-lg border border-stone-200 px-2 py-1"
+            className="rounded-lg border border-stone-200 px-2 py-1 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
-          <span className="text-stone-500">{t('dashboard.agenda.dateTo')}</span>
+          <span className="text-stone-500 dark:text-stone-400">{t('dashboard.agenda.dateTo')}</span>
           <input
             type="date"
             value={dateTo}
             onChange={(e) => setDateTo(e.target.value)}
-            className="rounded-lg border border-stone-200 px-2 py-1"
+            className="rounded-lg border border-stone-200 px-2 py-1 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
           />
         </label>
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value as StatusFilter)}
-          className="rounded-lg border border-stone-200 px-2 py-1.5 text-sm"
+          className="rounded-lg border border-stone-200 px-2 py-1.5 text-sm dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
         >
           <option value="all">{t('dashboard.agenda.statusAll')}</option>
           <option value="pending">{t('dashboard.agenda.statusPending')}</option>
@@ -380,12 +380,12 @@ export default function AgendaPage() {
           <option value="cancelled">{t('dashboard.agenda.statusCancelled')}</option>
         </select>
 
-        <div className="flex rounded-lg border border-stone-200 p-0.5">
+        <div className="flex rounded-lg border border-stone-200 p-0.5 dark:border-stone-700">
           <button
             type="button"
             onClick={() => setViewMode('list')}
             className={`flex items-center gap-1 rounded-md px-2.5 py-1 text-sm font-medium ${
-              viewMode === 'list' ? `${accent.soft} ${accent.softText}` : 'text-stone-500'
+              viewMode === 'list' ? `${accent.soft} ${accent.softText}` : 'text-stone-500 dark:text-stone-400'
             }`}
           >
             <List size={14} /> {t('dashboard.agenda.viewList')}
@@ -394,7 +394,7 @@ export default function AgendaPage() {
             type="button"
             onClick={() => setViewMode('calendar')}
             className={`flex items-center gap-1 rounded-md px-2.5 py-1 text-sm font-medium ${
-              viewMode === 'calendar' ? `${accent.soft} ${accent.softText}` : 'text-stone-500'
+              viewMode === 'calendar' ? `${accent.soft} ${accent.softText}` : 'text-stone-500 dark:text-stone-400'
             }`}
           >
             <CalendarDays size={14} /> {t('dashboard.agenda.viewCalendar')}
@@ -405,7 +405,7 @@ export default function AgendaPage() {
       {staff && staff.length > 1 && (
         <div className="mt-3 flex flex-wrap gap-3">
           {staff.map((member) => (
-            <span key={member.id} className="flex items-center gap-1.5 text-xs text-stone-500">
+            <span key={member.id} className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400">
               <span className={`h-2.5 w-2.5 rounded-full ${getStaffColor(member.id).dot}`} />
               {member.name}
             </span>
@@ -416,10 +416,10 @@ export default function AgendaPage() {
       {viewMode === 'list' && (
         <div className="mt-4 flex flex-col gap-2">
           {appointments?.map((appt) => (
-            <div key={appt.id} className="rounded-xl border border-stone-200 p-3">
+            <div key={appt.id} className="rounded-xl border border-stone-200 p-3 dark:border-stone-700">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <p className="flex items-center gap-2 font-medium text-stone-900">
+                  <p className="flex items-center gap-2 font-medium text-stone-900 dark:text-stone-50">
                     {appt.starts_at.slice(0, 10)} · {appt.starts_at.slice(11, 16)}–
                     {appt.ends_at.slice(11, 16)}
                     {appt.staff_name && staff && staff.length > 1 && (
@@ -430,7 +430,7 @@ export default function AgendaPage() {
                       </span>
                     )}
                   </p>
-                  <p className="text-sm text-stone-500">
+                  <p className="text-sm text-stone-500 dark:text-stone-400">
                     {appt.service_name} — {appt.client.name} (
                     {appt.client.email ?? appt.client.phone_e164 ?? t('dashboard.agenda.noContact')}
                     )
@@ -439,7 +439,7 @@ export default function AgendaPage() {
                 <div className="flex items-center gap-2">
                   {appt.flagged_for_review && (
                     <span
-                      className="flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700"
+                      className="flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700 dark:bg-red-950/30 dark:text-red-400"
                       title={t('dashboard.agenda.flaggedHint')}
                     >
                       <TriangleAlert size={12} />
@@ -465,12 +465,12 @@ export default function AgendaPage() {
                       <button
                         type="button"
                         onClick={() => setMovingId(movingId === appt.id ? null : appt.id)}
-                        className="rounded-lg px-3 py-1 text-sm font-medium text-stone-500 hover:bg-stone-100"
+                        className="rounded-lg px-3 py-1 text-sm font-medium text-stone-500 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
                       >
                         {t('dashboard.agenda.move')}
                       </button>
                       <label
-                        className="flex items-center gap-1 text-xs text-stone-400"
+                        className="flex items-center gap-1 text-xs text-stone-400 dark:text-stone-500"
                         title={canAutoNotify ? undefined : t('dashboard.planErrors.requiresTop')}
                       >
                         <input
@@ -487,7 +487,7 @@ export default function AgendaPage() {
                       <button
                         type="button"
                         onClick={() => cancel(appt.id)}
-                        className="rounded-lg px-3 py-1 text-sm font-medium text-stone-500 hover:bg-stone-100"
+                        className="rounded-lg px-3 py-1 text-sm font-medium text-stone-500 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
                       >
                         {t('dashboard.agenda.cancel')}
                       </button>
@@ -509,7 +509,7 @@ export default function AgendaPage() {
             </div>
           ))}
           {appointments && appointments.length === 0 && (
-            <p className="text-stone-400">{t('dashboard.agenda.empty')}</p>
+            <p className="text-stone-400 dark:text-stone-500">{t('dashboard.agenda.empty')}</p>
           )}
         </div>
       )}
@@ -524,10 +524,10 @@ export default function AgendaPage() {
                 .sort((a, b) => a.starts_at.localeCompare(b.starts_at))
               return (
                 <div key={dayKey} className="flex w-40 shrink-0 flex-col gap-2">
-                  <p className="text-center text-xs font-medium text-stone-500">
+                  <p className="text-center text-xs font-medium text-stone-500 dark:text-stone-400">
                     {day.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric' })}
                   </p>
-                  <div className="flex min-h-[4rem] flex-col gap-1.5 rounded-xl border border-stone-200 bg-stone-50 p-1.5">
+                  <div className="flex min-h-[4rem] flex-col gap-1.5 rounded-xl border border-stone-200 bg-stone-50 p-1.5 dark:border-stone-700 dark:bg-stone-900/40">
                     {dayAppointments.map((appt) => (
                       <div
                         key={appt.id}
@@ -541,7 +541,7 @@ export default function AgendaPage() {
                       </div>
                     ))}
                     {dayAppointments.length === 0 && (
-                      <p className="py-2 text-center text-xs text-stone-300">·</p>
+                      <p className="py-2 text-center text-xs text-stone-300 dark:text-stone-600">·</p>
                     )}
                   </div>
                 </div>

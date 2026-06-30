@@ -14,19 +14,19 @@ export default function LiveStep() {
 
   return (
     <div className="text-center">
-      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-stone-100">
-        <PartyPopper className="text-stone-700" />
+      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-stone-100 dark:bg-stone-800">
+        <PartyPopper className="text-stone-700 dark:text-stone-300" />
       </div>
-      <h2 className="mt-4 font-display text-2xl font-semibold text-stone-900">
+      <h2 className="mt-4 font-display text-2xl font-semibold text-stone-900 dark:text-stone-50">
         {t('onboarding.live.title')}
       </h2>
-      <p className="mt-1 text-stone-500">{t('onboarding.live.subtitle')}</p>
+      <p className="mt-1 text-stone-500 dark:text-stone-400">{t('onboarding.live.subtitle')}</p>
 
       <a
         href={publicUrl}
         target="_blank"
         rel="noreferrer"
-        className="mt-3 inline-block rounded-xl bg-stone-50 px-4 py-2 font-mono text-sm text-stone-700"
+        className="mt-3 inline-block rounded-xl bg-stone-50 px-4 py-2 font-mono text-sm text-stone-700 dark:bg-stone-900/40 dark:text-stone-300"
       >
         {publicUrl}
       </a>

@@ -110,11 +110,11 @@ export default function StaffPage() {
 
   return (
     <div>
-      <h1 className="font-display text-xl font-semibold text-stone-900">
+      <h1 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('dashboard.staff.title')}
       </h1>
-      <p className="mt-1 text-stone-500">{t('dashboard.staff.subtitle')}</p>
-      <p className="mt-3 rounded-xl border border-stone-200 bg-stone-50 p-3 text-sm text-stone-600">
+      <p className="mt-1 text-stone-500 dark:text-stone-400">{t('dashboard.staff.subtitle')}</p>
+      <p className="mt-3 rounded-xl border border-stone-200 bg-stone-50 p-3 text-sm text-stone-600 dark:border-stone-700 dark:bg-stone-900/40 dark:text-stone-300">
         {t('dashboard.staff.switcherHint')}
       </p>
 
@@ -133,7 +133,7 @@ export default function StaffPage() {
 
       <div className="mt-6 flex flex-col gap-2">
         {staff?.map((member) => (
-          <div key={member.id} className="flex flex-col gap-2 rounded-xl border border-stone-200 p-3">
+          <div key={member.id} className="flex flex-col gap-2 rounded-xl border border-stone-200 p-3 dark:border-stone-700">
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -152,7 +152,7 @@ export default function StaffPage() {
                   className="h-9 w-9 rounded-full object-cover"
                 />
               ) : (
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-stone-100 text-xs font-medium text-stone-400">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-stone-100 text-xs font-medium text-stone-400 dark:bg-stone-800 dark:text-stone-500">
                   {uploadingPhotoFor === member.id ? '…' : '+'}
                 </span>
               )}
@@ -161,7 +161,7 @@ export default function StaffPage() {
               <button
                 type="button"
                 onClick={() => removePhoto(member)}
-                className="text-xs font-medium text-stone-400 underline hover:text-stone-600"
+                className="text-xs font-medium text-stone-400 underline hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300"
               >
                 {t('dashboard.staff.removePhoto')}
               </button>
@@ -169,9 +169,9 @@ export default function StaffPage() {
             <input
               defaultValue={member.name}
               onBlur={(e) => renameStaff(member, e.target.value)}
-              className="flex-1 rounded-lg border border-transparent px-2 py-1 font-medium hover:border-stone-200 focus:border-stone-300 focus:outline-none"
+              className="flex-1 rounded-lg border border-transparent px-2 py-1 font-medium hover:border-stone-200 focus:border-stone-300 focus:outline-none dark:text-stone-100 dark:hover:border-stone-700 dark:focus:border-stone-600"
             />
-            <label className="flex items-center gap-1.5 text-xs text-stone-500">
+            <label className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400">
               <input
                 type="checkbox"
                 checked={member.active}
@@ -181,7 +181,9 @@ export default function StaffPage() {
             </label>
             <span
               className={`rounded-full px-2.5 py-1 text-xs font-medium ${
-                member.pin_set ? 'bg-emerald-100 text-emerald-700' : 'bg-stone-100 text-stone-500'
+                member.pin_set
+                  ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400'
+                  : 'bg-stone-100 text-stone-500 dark:bg-stone-800 dark:text-stone-400'
               }`}
             >
               {member.pin_set ? t('dashboard.staff.pinSet') : t('dashboard.staff.pinNotSet')}
@@ -190,7 +192,7 @@ export default function StaffPage() {
               <button
                 type="button"
                 onClick={() => resetPin(member)}
-                className="text-sm font-medium text-stone-500 hover:text-stone-800"
+                className="text-sm font-medium text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-stone-200"
               >
                 {t('dashboard.staff.resetPin')}
               </button>
@@ -198,7 +200,7 @@ export default function StaffPage() {
             <button
               type="button"
               onClick={() => removeStaff(member)}
-              className="text-stone-400 hover:text-red-500"
+              className="text-stone-400 hover:text-red-500 dark:text-stone-500 dark:hover:text-red-400"
               aria-label={t('common.remove')}
             >
               <Trash2 size={18} />
@@ -209,14 +211,14 @@ export default function StaffPage() {
             onBlur={(e) => updateBio(member, e.target.value)}
             placeholder={t('dashboard.staff.bioPlaceholder')}
             rows={2}
-            className="rounded-lg border border-stone-200 px-2 py-1.5 text-sm"
+            className="rounded-lg border border-stone-200 px-2 py-1.5 text-sm dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
           />
           </div>
         ))}
       </div>
 
       {error && (
-        <p className="mt-3 text-sm text-red-600">
+        <p className="mt-3 text-sm text-red-600 dark:text-red-400">
           {error}{' '}
           {planError && (
             <a href="/dashboard/billing" className="underline">
@@ -234,13 +236,13 @@ export default function StaffPage() {
         />
         {staff && staff.length > 0 && (
           <label className="flex flex-col gap-1.5 text-sm">
-            <span className="font-medium text-stone-700">
+            <span className="font-medium text-stone-700 dark:text-stone-300">
               {t('dashboard.staff.copyServicesFrom')}
             </span>
             <select
               value={copyFrom}
               onChange={(e) => setCopyFrom(e.target.value ? Number(e.target.value) : '')}
-              className="rounded-xl border border-stone-200 px-3 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+              className="rounded-xl border border-stone-200 px-3 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:focus:border-stone-500 dark:focus:ring-stone-700"
             >
               <option value="">{t('dashboard.staff.copyServicesNone')}</option>
               {staff.map((member) => (

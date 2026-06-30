@@ -33,7 +33,7 @@ export default function ForgotPasswordPage() {
   return (
     <AuthCard title={t('auth.forgotPassword.title')} subtitle={t('auth.forgotPassword.subtitle')}>
       {sent ? (
-        <p className="text-sm text-stone-600">{t('auth.forgotPassword.sent')}</p>
+        <p className="text-sm text-stone-600 dark:text-stone-300">{t('auth.forgotPassword.sent')}</p>
       ) : (
         <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
           <TextInput
@@ -42,14 +42,14 @@ export default function ForgotPasswordPage() {
             {...register('email', { required: true })}
             error={errors.email && t('common.required')}
           />
-          {serverError && <p className="text-sm text-red-600">{serverError}</p>}
+          {serverError && <p className="text-sm text-red-600 dark:text-red-400">{serverError}</p>}
           <Button type="submit" disabled={isSubmitting} className="mt-2">
             {t('auth.forgotPassword.submit')}
           </Button>
         </form>
       )}
-      <p className="mt-4 text-sm text-stone-500">
-        <Link to="/login" className="font-medium text-stone-900 underline">
+      <p className="mt-4 text-sm text-stone-500 dark:text-stone-400">
+        <Link to="/login" className="font-medium text-stone-900 underline dark:text-stone-100">
           {t('auth.forgotPassword.backToLogin')}
         </Link>
       </p>

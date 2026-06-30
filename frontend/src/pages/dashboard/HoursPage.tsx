@@ -52,27 +52,27 @@ function VacationSection({ staffId }: { staffId: number }) {
 
   return (
     <div className="mt-8">
-      <h2 className="font-medium text-stone-700">{t('dashboard.hours.vacationTitle')}</h2>
-      <p className="text-xs text-stone-400">{t('dashboard.hours.vacationHint')}</p>
+      <h2 className="font-medium text-stone-700 dark:text-stone-300">{t('dashboard.hours.vacationTitle')}</h2>
+      <p className="text-xs text-stone-400 dark:text-stone-500">{t('dashboard.hours.vacationHint')}</p>
 
       <div className="mt-3 flex flex-col gap-2">
         {timeOff?.map((range) => (
           <div
             key={range.id}
-            className="flex items-center justify-between gap-2 rounded-xl border border-stone-200 p-3"
+            className="flex items-center justify-between gap-2 rounded-xl border border-stone-200 p-3 dark:border-stone-700"
           >
             <div>
-              <p className="text-sm font-medium text-stone-800">
+              <p className="text-sm font-medium text-stone-800 dark:text-stone-200">
                 {range.start_date === range.end_date
                   ? range.start_date
                   : `${range.start_date} – ${range.end_date}`}
               </p>
-              {range.note && <p className="text-xs text-stone-400">{range.note}</p>}
+              {range.note && <p className="text-xs text-stone-400 dark:text-stone-500">{range.note}</p>}
             </div>
             <button
               type="button"
               onClick={() => removeRange(range.id)}
-              className="text-stone-400 hover:text-red-500"
+              className="text-stone-400 hover:text-red-500 dark:text-stone-500 dark:hover:text-red-400"
               aria-label={t('common.remove')}
             >
               <Trash2 size={16} />
@@ -80,42 +80,42 @@ function VacationSection({ staffId }: { staffId: number }) {
           </div>
         ))}
         {timeOff && timeOff.length === 0 && (
-          <p className="text-sm text-stone-400">{t('dashboard.hours.vacationEmpty')}</p>
+          <p className="text-sm text-stone-400 dark:text-stone-500">{t('dashboard.hours.vacationEmpty')}</p>
         )}
       </div>
 
       <div className="mt-3 flex flex-wrap items-end gap-2">
         <label className="flex flex-col gap-1.5 text-sm">
-          <span className="font-medium text-stone-700">{t('dashboard.hours.vacationFrom')}</span>
+          <span className="font-medium text-stone-700 dark:text-stone-300">{t('dashboard.hours.vacationFrom')}</span>
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="rounded-lg border border-stone-200 px-2 py-1.5"
+            className="rounded-lg border border-stone-200 px-2 py-1.5 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
           />
         </label>
         <label className="flex flex-col gap-1.5 text-sm">
-          <span className="font-medium text-stone-700">{t('dashboard.hours.vacationTo')}</span>
+          <span className="font-medium text-stone-700 dark:text-stone-300">{t('dashboard.hours.vacationTo')}</span>
           <input
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="rounded-lg border border-stone-200 px-2 py-1.5"
+            className="rounded-lg border border-stone-200 px-2 py-1.5 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
           />
         </label>
         <label className="flex flex-col gap-1.5 text-sm">
-          <span className="font-medium text-stone-700">{t('dashboard.hours.vacationNote')}</span>
+          <span className="font-medium text-stone-700 dark:text-stone-300">{t('dashboard.hours.vacationNote')}</span>
           <input
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="rounded-lg border border-stone-200 px-2 py-1.5"
+            className="rounded-lg border border-stone-200 px-2 py-1.5 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
           />
         </label>
         <Button type="button" variant="secondary" onClick={addRange} disabled={!startDate || !endDate}>
           {t('dashboard.hours.vacationAdd')}
         </Button>
       </div>
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{error}</p>}
     </div>
   )
 }
@@ -169,10 +169,10 @@ export default function HoursPage() {
 
   return (
     <div>
-      <h1 className="font-display text-xl font-semibold text-stone-900">
+      <h1 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('dashboard.hours.title')}
       </h1>
-      <p className="mt-1 text-stone-500">
+      <p className="mt-1 text-stone-500 dark:text-stone-400">
         {activeStaffName
           ? t('dashboard.hours.subtitleFor', { name: activeStaffName })
           : t('dashboard.hours.subtitle')}
@@ -182,12 +182,12 @@ export default function HoursPage() {
         {hours?.map((hour) => (
           <div
             key={hour.weekday}
-            className="flex flex-wrap items-center gap-3 rounded-xl border border-stone-200 p-3"
+            className="flex flex-wrap items-center gap-3 rounded-xl border border-stone-200 p-3 dark:border-stone-700"
           >
-            <span className="w-24 text-sm font-medium text-stone-700">
+            <span className="w-24 text-sm font-medium text-stone-700 dark:text-stone-300">
               {t(`onboarding.hours.weekdays.${hour.weekday}`)}
             </span>
-            <label className="flex items-center gap-1.5 text-xs text-stone-500">
+            <label className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400">
               <input
                 type="checkbox"
                 checked={!hour.is_closed}
@@ -203,18 +203,18 @@ export default function HoursPage() {
                   onChange={(e) =>
                     updateDay(hour.weekday, { open_minute: timeInputToMinutes(e.target.value) })
                   }
-                  className="rounded-lg border border-stone-200 px-2 py-1 text-sm"
+                  className="rounded-lg border border-stone-200 px-2 py-1 text-sm dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
                 />
-                <span className="text-stone-400">–</span>
+                <span className="text-stone-400 dark:text-stone-500">–</span>
                 <input
                   type="time"
                   value={minutesToTimeInput(hour.close_minute)}
                   onChange={(e) =>
                     updateDay(hour.weekday, { close_minute: timeInputToMinutes(e.target.value) })
                   }
-                  className="rounded-lg border border-stone-200 px-2 py-1 text-sm"
+                  className="rounded-lg border border-stone-200 px-2 py-1 text-sm dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
                 />
-                <label className="flex items-center gap-1.5 text-xs text-stone-500">
+                <label className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400">
                   {t('dashboard.hours.slotMinutes')}
                   <input
                     type="number"
@@ -224,7 +224,7 @@ export default function HoursPage() {
                     onChange={(e) =>
                       updateDay(hour.weekday, { slot_minutes: Number(e.target.value) })
                     }
-                    className="w-16 rounded-lg border border-stone-200 px-2 py-1 text-sm"
+                    className="w-16 rounded-lg border border-stone-200 px-2 py-1 text-sm dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100"
                   />
                 </label>
               </>
@@ -237,7 +237,7 @@ export default function HoursPage() {
         <Button onClick={save} disabled={!hours || saving} accentKey={business?.accent_key}>
           {t('dashboard.settings.save')}
         </Button>
-        {saved && <span className="text-sm text-emerald-600">{t('dashboard.settings.saved')}</span>}
+        {saved && <span className="text-sm text-emerald-600 dark:text-emerald-400">{t('dashboard.settings.saved')}</span>}
       </div>
 
       {resolvedStaffId && <VacationSection staffId={resolvedStaffId} />}

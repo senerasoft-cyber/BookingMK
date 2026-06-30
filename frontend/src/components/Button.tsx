@@ -11,7 +11,7 @@ export function Button({ variant = 'primary', accentKey, className = '', ...prop
   if (variant === 'secondary') {
     return (
       <button
-        className={`rounded-xl px-5 py-2.5 font-medium text-stone-600 transition hover:bg-stone-100 disabled:opacity-50 ${className}`}
+        className={`rounded-xl px-5 py-2.5 font-medium text-stone-600 transition hover:bg-stone-100 disabled:opacity-50 dark:text-stone-300 dark:hover:bg-stone-800 ${className}`}
         {...props}
       />
     )

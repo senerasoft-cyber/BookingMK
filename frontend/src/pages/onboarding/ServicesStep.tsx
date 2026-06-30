@@ -17,10 +17,10 @@ export default function ServicesStep() {
 
   return (
     <div>
-      <h2 className="font-display text-xl font-semibold text-stone-900">
+      <h2 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('onboarding.services.title')}
       </h2>
-      <p className="mt-1 text-stone-500">{t('onboarding.services.subtitle')}</p>
+      <p className="mt-1 text-stone-500 dark:text-stone-400">{t('onboarding.services.subtitle')}</p>
 
       <div className="mt-6">
         <ServicesEditor />

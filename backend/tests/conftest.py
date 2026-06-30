@@ -24,10 +24,15 @@ def client(app):
     return app.test_client()
 
 
+# Not "password123" -- that's now rejected as a too-common password by
+# RegisterSchema's strength check (see app/schemas.py).
+DEFAULT_TEST_PASSWORD = "Bukano-Demo42"
+
+
 def register_business(
     client,
     email="owner@example.com",
-    password="password123",
+    password=DEFAULT_TEST_PASSWORD,
     business_name="Studio Linija",
     plan_id="top",
 ):

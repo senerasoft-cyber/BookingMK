@@ -70,17 +70,17 @@ function VerifyEmailStep({
           inputMode="numeric"
           maxLength={6}
           placeholder="000000"
-          className="rounded-xl border border-stone-200 px-4 py-3 text-center text-2xl font-mono tracking-[0.4em] outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+          className="rounded-xl border border-stone-200 bg-white px-4 py-3 text-center text-2xl font-mono tracking-[0.4em] text-stone-900 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:focus:border-stone-500 dark:focus:ring-stone-700"
           autoFocus
         />
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
         <Button type="button" onClick={submit} disabled={busy || code.length < 6}>
           {t('auth.verify.submit')}
         </Button>
         <button
           type="button"
           onClick={resend}
-          className="text-sm text-stone-500 underline"
+          className="text-sm text-stone-500 underline dark:text-stone-400"
         >
           {resent ? t('auth.verify.resent') : t('auth.verify.resend')}
         </button>
@@ -151,7 +151,7 @@ export default function RegisterPage() {
         <TextInput
           label={t('auth.register.password')}
           type="password"
-          {...register('password', { required: true, minLength: 8 })}
+          {...register('password', { required: true, minLength: 10, maxLength: 128 })}
           error={errors.password && t('auth.register.passwordMinLength')}
         />
         <TextInput
@@ -164,8 +164,8 @@ export default function RegisterPage() {
           error={errors.confirm_password?.message}
         />
         <TurnstileWidget onVerify={setTurnstileToken} />
-        {serverError && <p className="text-sm text-red-600">{serverError}</p>}
-        <p className="text-xs text-stone-400">
+        {serverError && <p className="text-sm text-red-600 dark:text-red-400">{serverError}</p>}
+        <p className="text-xs text-stone-400 dark:text-stone-500">
           {t('auth.register.agreeToTermsPrefix')}{' '}
           <Link to="/terms" className="underline">
             {t('auth.register.termsLink')}
@@ -180,9 +180,9 @@ export default function RegisterPage() {
           {t('auth.register.submit')}
         </Button>
       </form>
-      <p className="mt-4 text-sm text-stone-500">
+      <p className="mt-4 text-sm text-stone-500 dark:text-stone-400">
         {t('auth.register.haveAccount')}{' '}
-        <Link to="/login" className="font-medium text-stone-900 underline">
+        <Link to="/login" className="font-medium text-stone-900 underline dark:text-stone-100">
           {t('auth.register.loginLink')}
         </Link>
       </p>

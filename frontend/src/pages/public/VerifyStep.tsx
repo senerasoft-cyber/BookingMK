@@ -100,28 +100,28 @@ export default function VerifyStep({
 
   return (
     <div>
-      <h2 className="font-display text-xl font-semibold text-stone-900">
+      <h2 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('public.verify.title')}
       </h2>
-      <p className="mt-1 text-stone-500">{t('public.verify.subtitle', { email })}</p>
+      <p className="mt-1 text-stone-500 dark:text-stone-400">{t('public.verify.subtitle', { email })}</p>
       {currentDevCode && (
-        <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-700">
+        <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-700 dark:bg-amber-950/30 dark:text-amber-300">
           {t('public.verify.devCodeHint', { code: currentDevCode })}
         </p>
       )}
 
       <label className="mt-4 flex flex-col gap-1.5">
-        <span className="text-sm font-medium text-stone-700">{t('public.verify.code')}</span>
+        <span className="text-sm font-medium text-stone-700 dark:text-stone-200">{t('public.verify.code')}</span>
         <input
           value={code}
           onChange={(e) => setCode(e.target.value)}
           inputMode="numeric"
           maxLength={6}
-          className="rounded-xl border border-stone-200 px-4 py-2.5 text-lg tracking-widest outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200"
+          className="rounded-xl border border-stone-200 px-4 py-2.5 text-lg tracking-widest outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:focus:border-stone-500 dark:focus:ring-stone-700"
         />
       </label>
 
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{error}</p>}
 
       <div className="mt-4 flex gap-3">
         <Button type="button" variant="secondary" onClick={onBack} disabled={busy}>
@@ -142,19 +142,19 @@ export default function VerifyStep({
           type="button"
           disabled={busy}
           onClick={resend}
-          className="font-medium text-stone-600 underline"
+          className="font-medium text-stone-600 underline dark:text-stone-300"
         >
           {t('public.verify.resendCode')}
         </button>
       </div>
 
       <div className="mt-4 text-sm">
-        <span className="text-stone-400">{t('public.verify.cantGetCode')} </span>
+        <span className="text-stone-400 dark:text-stone-500">{t('public.verify.cantGetCode')} </span>
         <button
           type="button"
           disabled={busy}
           onClick={skipVerification}
-          className="font-medium text-stone-600 underline"
+          className="font-medium text-stone-600 underline dark:text-stone-300"
         >
           {t('public.verify.cantGetCodeAction')}
         </button>

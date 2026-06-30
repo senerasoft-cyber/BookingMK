@@ -36,7 +36,7 @@
       "haveAccount": "Already have an account?",
       "loginLink": "Log in",
       "confirmPassword": "Confirm password",
-      "passwordMinLength": "At least 8 characters",
+      "passwordMinLength": "At least 10 characters",
       "passwordMismatch": "Passwords don't match",
       "agreeToTermsPrefix": "By creating an account, you agree to our",
       "termsLink": "Terms of Service",
@@ -147,7 +147,7 @@
     },
     "billing": {
       "title": "Choose your plan",
-      "subtitle": "Pick a plan to start taking real bookings — every plan requires payment, there's no free tier.",
+      "subtitle": "Start a free trial or pick a plan to start taking real bookings.",
       "perMonth": "/mo",
       "unlimitedStaff": "Unlimited staff",
       "maxStaff": "Up to {{count}} staff member",
@@ -158,7 +158,13 @@
       "subscribe": "Subscribe",
       "current": "Current plan",
       "havePromo": "Have a promo code?",
-      "promoRedeem": "Redeem"
+      "promoRedeem": "Redeem",
+      "startTrial": "Start free 7-day trial",
+      "startTrialHint": "No card required — full access for 7 days.",
+      "orChoosePlan": "Or choose a plan to subscribe now",
+      "trialErrors": {
+        "trial_already_used": "You've already used your free trial."
+      }
     },
     "live": {
       "title": "You're live!",
@@ -273,7 +279,8 @@
       "billing": "Billing",
       "settings": "Settings",
       "viewPublicPage": "View page",
-      "logout": "Log out"
+      "logout": "Log out",
+      "setupGroup": "Setup"
     },
     "staffSwitcher": {
       "viewingAs": "Viewing as",
@@ -450,6 +457,7 @@
       "subtitle": "Your current plan and subscription status.",
       "renewsOn": "renews {{date}}",
       "promoEndsOn": "free trial ends {{date}}",
+      "trialEndsOn": "free trial ends {{date}}",
       "cancel": "Cancel subscription",
       "promoCode": "Promo code",
       "promoRedeem": "Redeem",
@@ -458,7 +466,8 @@
         "active": "Active",
         "past_due": "Payment failed",
         "canceled": "Canceled",
-        "promo": "Free trial"
+        "promo": "Free trial",
+        "trial": "Free trial"
       },
       "promoErrors": {
         "invalid_code": "That code isn't valid.",

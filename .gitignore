@@ -15,9 +15,11 @@ frontend/.vite/
 # Env
 .env
 .env.production
+.env.*.local
 backend/.env
 backend/.env.production
 frontend/.env
+frontend/.env.*.local
 
 # Editors / OS
 .vscode/

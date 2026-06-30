@@ -35,7 +35,7 @@ export default function OnboardingLayout() {
                     ? `${accent.main} ${accent.mainText}`
                     : isDone
                       ? `${accent.soft} ${accent.softText}`
-                      : 'bg-white text-stone-400'
+                      : 'bg-white text-stone-400 dark:bg-stone-800 dark:text-stone-500'
                 }`}
               >
                 {index + 1}. {t(step.labelKey)}
@@ -43,7 +43,7 @@ export default function OnboardingLayout() {
             )
           })}
         </ol>
-        <div className="rounded-2xl bg-white p-8 shadow-lg shadow-stone-200">
+        <div className="rounded-2xl bg-white p-8 shadow-lg shadow-stone-200 dark:bg-stone-900 dark:shadow-none dark:ring-1 dark:ring-stone-800">
           <Outlet />
         </div>
       </div>

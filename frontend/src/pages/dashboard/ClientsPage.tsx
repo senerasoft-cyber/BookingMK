@@ -69,10 +69,10 @@ export default function ClientsPage() {
 
   return (
     <div>
-      <h1 className="font-display text-xl font-semibold text-stone-900">
+      <h1 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
         {t('dashboard.clients.title')}
       </h1>
-      <p className="mt-1 text-stone-500">{t('dashboard.clients.subtitle')}</p>
+      <p className="mt-1 text-stone-500 dark:text-stone-400">{t('dashboard.clients.subtitle')}</p>
 
       <div className="mt-4 max-w-sm">
         <TextInput
@@ -87,28 +87,28 @@ export default function ClientsPage() {
         {visibleClients?.map((c) => (
           <div
             key={c.id}
-            className="flex items-center justify-between gap-2 rounded-xl border border-stone-200 p-3"
+            className="flex items-center justify-between gap-2 rounded-xl border border-stone-200 p-3 dark:border-stone-700"
           >
             <div>
-              <p className="font-medium text-stone-900">{c.name}</p>
-              {c.email && <p className="text-sm text-stone-500">{c.email}</p>}
-              {c.phone_e164 && <p className="text-sm text-stone-400">{c.phone_e164}</p>}
+              <p className="font-medium text-stone-900 dark:text-stone-50">{c.name}</p>
+              {c.email && <p className="text-sm text-stone-500 dark:text-stone-400">{c.email}</p>}
+              {c.phone_e164 && <p className="text-sm text-stone-400 dark:text-stone-500">{c.phone_e164}</p>}
               {!c.email && !c.phone_e164 && (
-                <p className="text-sm text-stone-400">{t('dashboard.agenda.noContact')}</p>
+                <p className="text-sm text-stone-400 dark:text-stone-500">{t('dashboard.agenda.noContact')}</p>
               )}
-              <p className="mt-1 text-xs text-stone-400">
+              <p className="mt-1 text-xs text-stone-400 dark:text-stone-500">
                 {t('dashboard.clients.bookingCount', { count: c.booking_count })}
               </p>
             </div>
             {c.is_approved ? (
               <div className="flex items-center gap-2">
-                <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400">
                   {t('dashboard.clients.approved')}
                 </span>
                 <button
                   type="button"
                   onClick={() => unapprove(c.id)}
-                  className="text-xs font-medium text-stone-400 underline hover:text-stone-600"
+                  className="text-xs font-medium text-stone-400 underline hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300"
                 >
                   {t('dashboard.clients.removeTrusted')}
                 </button>
@@ -117,7 +117,7 @@ export default function ClientsPage() {
               <button
                 type="button"
                 onClick={() => approve(c.id)}
-                className="rounded-lg bg-stone-100 px-3 py-1 text-sm font-medium text-stone-600 hover:bg-stone-200"
+                className="rounded-lg bg-stone-100 px-3 py-1 text-sm font-medium text-stone-600 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700"
               >
                 {t('dashboard.clients.approve')}
               </button>
@@ -125,7 +125,7 @@ export default function ClientsPage() {
           </div>
         ))}
         {visibleClients && visibleClients.length === 0 && (
-          <p className="text-stone-400">
+          <p className="text-stone-400 dark:text-stone-500">
             {clients && clients.length > 0
               ? t('dashboard.clients.noResults')
               : t('dashboard.clients.empty')}
@@ -133,7 +133,7 @@ export default function ClientsPage() {
         )}
       </div>
 
-      <h2 className="mt-8 font-medium text-stone-700">{t('dashboard.clients.addClient')}</h2>
+      <h2 className="mt-8 font-medium text-stone-700 dark:text-stone-300">{t('dashboard.clients.addClient')}</h2>
       <form className="mt-3 flex flex-wrap items-end gap-3" onSubmit={handleSubmit(onSubmit)}>
         <TextInput
           label={t('dashboard.clients.name')}
@@ -155,7 +155,7 @@ export default function ClientsPage() {
           {t('dashboard.clients.addClientAction')}
         </Button>
       </form>
-      {serverError && <p className="mt-2 text-sm text-red-600">{serverError}</p>}
+      {serverError && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{serverError}</p>}
     </div>
   )
 }
