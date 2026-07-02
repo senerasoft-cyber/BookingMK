@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { ApiError, apiGet, apiPost } from '../../lib/api'
 import { useAuth } from '../../context/AuthContext'
 import { advanceOnboarding } from '../../lib/onboarding'
+import { openPaddleCheckout } from '../../lib/paddle'
 import type { Plan } from '../../types'
 
 function promoErrorMessage(t: (key: string) => string, err: unknown): string {
@@ -83,13 +84,17 @@ export default function BillingStep() {
     setError(null)
     setBusyPlan(planId)
     try {
-      const result = await apiPost<{ business: unknown; checkout_url?: string | null }>(
+      const result = await apiPost<{ business: unknown; transaction_id?: string | null }>(
         '/me/subscription/checkout',
         { plan_id: planId, interval },
         true,
       )
-      if (result.checkout_url) {
-        window.location.assign(result.checkout_url)
+      if (result.transaction_id) {
+        const opened = await openPaddleCheckout(result.transaction_id, () => {
+          advanceOnboarding(refreshBusiness, navigate, 6)
+        })
+        if (opened) return
+        setError(t('common.somethingWentWrong'))
         return
       }
       await advanceOnboarding(refreshBusiness, navigate, 6)

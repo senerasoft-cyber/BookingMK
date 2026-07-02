@@ -7,6 +7,7 @@ import { Button } from '../../components/Button'
 import { TextInput } from '../../components/TextInput'
 import { useAuth } from '../../context/AuthContext'
 import { ApiError, apiGet, apiPost } from '../../lib/api'
+import { openPaddleCheckout } from '../../lib/paddle'
 import type { Plan } from '../../types'
 
 const FEATURE_KEYS: { key: keyof Plan; labelKey: string }[] = [
@@ -87,13 +88,18 @@ export default function BillingPage() {
     setError(null)
     setBusyPlan(planId)
     try {
-      const result = await apiPost<{ checkout_url?: string | null }>(
+      const result = await apiPost<{ transaction_id?: string | null }>(
         '/me/subscription/checkout',
         { plan_id: planId, interval },
         true,
       )
-      if (result.checkout_url) {
-        window.location.assign(result.checkout_url)
+      if (result.transaction_id) {
+        const opened = await openPaddleCheckout(result.transaction_id, () => {
+          refreshBusiness()
+          queryClient.invalidateQueries({ queryKey: ['staff'] })
+        })
+        if (opened) return
+        setError(t('common.somethingWentWrong'))
         return
       }
       await refreshBusiness()
