@@ -14,8 +14,9 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate, NavLink, Outlet } from 'react-router-dom'
+import { Link, Navigate, NavLink, Outlet } from 'react-router-dom'
 
+import { Logo } from '../../components/Logo'
 import { ThemeToggle } from '../../components/ThemeToggle'
 import { useAuth } from '../../context/AuthContext'
 import { ApiError, apiGet, apiPost } from '../../lib/api'
@@ -204,15 +205,21 @@ export default function DashboardLayout() {
 
   return (
     <div className={`min-h-screen ${accent.canvas}`}>
-      <div className="mx-auto flex max-w-5xl gap-6 px-6 py-8">
-        <aside className="w-56 shrink-0">
-          <div className="mb-4 flex items-center justify-between px-2">
-            <p className="truncate font-display text-lg font-semibold text-stone-900 dark:text-stone-50">
+      <header className="sticky top-0 z-10 border-b border-stone-200 bg-white/80 backdrop-blur dark:border-stone-800 dark:bg-stone-950/80">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
+          <Link to="/dashboard" className="flex items-center gap-2">
+            <Logo size="sm" />
+          </Link>
+          <div className="flex items-center gap-3">
+            <span className="hidden truncate text-sm font-medium text-stone-500 dark:text-stone-400 sm:inline">
               {business.name}
-            </p>
+            </span>
             <ThemeToggle className="shrink-0" />
           </div>
-
+        </div>
+      </header>
+      <div className="mx-auto flex max-w-5xl gap-6 px-6 py-8">
+        <aside className="w-56 shrink-0">
           <div className="mb-4 px-2">
             <StaffSwitcher
               staff={staff}

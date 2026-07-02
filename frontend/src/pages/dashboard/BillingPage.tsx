@@ -132,7 +132,7 @@ export default function BillingPage() {
       <p className="mt-1 text-stone-500 dark:text-stone-400">{t('dashboard.billing.subtitle')}</p>
 
       {business && (
-        <div className="mt-4 flex items-center gap-3 rounded-xl border border-stone-200 p-3 dark:border-stone-700">
+        <div className="mt-4 flex items-center gap-3 rounded-2xl border border-stone-200 bg-white p-4 shadow-sm dark:border-stone-800 dark:bg-stone-900">
           <span
             className={`rounded-full px-2.5 py-1 text-xs font-medium ${
               isPromo
@@ -207,8 +207,25 @@ export default function BillingPage() {
       </div>
 
       <div className="mt-3 grid gap-4 sm:grid-cols-3">
-        {plans?.map((plan) => (
-          <div key={plan.id} className="flex flex-col rounded-2xl border border-stone-200 p-4 dark:border-stone-700">
+        {plans?.map((plan) => {
+          const isCurrent =
+            business?.plan_id === plan.id &&
+            business.subscription_status === 'active' &&
+            business.billing_interval === interval
+          return (
+          <div
+            key={plan.id}
+            className={`flex flex-col rounded-2xl p-4 shadow-sm transition-shadow ${
+              isCurrent
+                ? 'border-2 border-teal-500 bg-white dark:border-teal-500 dark:bg-stone-900'
+                : 'border border-stone-200 bg-white hover:shadow-md dark:border-stone-800 dark:bg-stone-900'
+            }`}
+          >
+            {isCurrent && (
+              <span className="mb-2 inline-flex w-fit items-center rounded-full bg-teal-100 px-2.5 py-0.5 text-xs font-semibold text-teal-700 dark:bg-teal-950/40 dark:text-teal-300">
+                {t('onboarding.billing.current')}
+              </span>
+            )}
             <h3 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">{plan.name}</h3>
             {isYearly ? (
               <div className="mt-1">
@@ -246,22 +263,14 @@ export default function BillingPage() {
             <button
               type="button"
               onClick={() => subscribe(plan.id)}
-              disabled={
-                busyPlan !== null ||
-                (business?.plan_id === plan.id &&
-                  business.subscription_status === 'active' &&
-                  business.billing_interval === interval)
-              }
+              disabled={busyPlan !== null || isCurrent}
               className="mt-4 rounded-xl bg-stone-800 px-4 py-2.5 font-medium text-white disabled:opacity-50 dark:bg-stone-700 dark:hover:bg-stone-600"
             >
-              {business?.plan_id === plan.id &&
-              business.subscription_status === 'active' &&
-              business.billing_interval === interval
-                ? t('onboarding.billing.current')
-                : t('onboarding.billing.subscribe')}
+              {isCurrent ? t('onboarding.billing.current') : t('onboarding.billing.subscribe')}
             </button>
           </div>
-        ))}
+          )
+        })}
       </div>
 
       {error && <p className="mt-4 text-sm text-red-600 dark:text-red-400">{error}</p>}

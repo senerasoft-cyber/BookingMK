@@ -54,9 +54,9 @@ h3 {
 }
 
 ::selection {
-  background-color: #fde68a;
+  background-color: #99f6e4;
 }
 
 .dark ::selection {
-  background-color: #92400e;
+  background-color: #115e59;
 }

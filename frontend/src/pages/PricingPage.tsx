@@ -37,7 +37,14 @@ const PLANS: PlanCopy[] = [
     priceMonthly: 19,
     priceYearly: 190,
     staffLine: 'Up to 3 staff members',
-    features: ['Everything in Basic', 'Stats dashboard', 'Vouchers & loyalty rewards'],
+    features: [
+      'Online booking page',
+      'Email verification & reminders',
+      'Branding (logo, cover, gallery)',
+      'Staff profile & bio',
+      'Stats dashboard',
+      'Vouchers & loyalty rewards',
+    ],
     highlighted: true,
   },
   {
@@ -46,7 +53,15 @@ const PLANS: PlanCopy[] = [
     priceMonthly: 39,
     priceYearly: 390,
     staffLine: 'Unlimited staff',
-    features: ['Everything in Mid', 'Remove "Powered by Bukano" branding'],
+    features: [
+      'Online booking page',
+      'Email verification & reminders',
+      'Branding (logo, cover, gallery)',
+      'Staff profile & bio',
+      'Stats dashboard',
+      'Vouchers & loyalty rewards',
+      'Remove "Powered by Bukano" branding',
+    ],
   },
 ]
 
@@ -104,12 +119,12 @@ export default function PricingPage() {
               key={plan.id}
               className={`flex flex-col rounded-2xl p-5 shadow-lg shadow-stone-200/60 dark:shadow-none ${
                 plan.highlighted
-                  ? 'bg-stone-900 text-white ring-2 ring-amber-500 dark:bg-stone-900 dark:ring-amber-500'
+                  ? 'bg-stone-900 text-white ring-2 ring-teal-500 dark:bg-stone-900 dark:ring-teal-500'
                   : 'bg-white text-stone-900 dark:bg-stone-900 dark:text-stone-50 dark:ring-1 dark:ring-stone-800'
               }`}
             >
               {plan.highlighted && (
-                <span className="mb-2 inline-flex w-fit items-center rounded-full bg-amber-500 px-2.5 py-0.5 text-xs font-semibold text-white">
+                <span className="mb-2 inline-flex w-fit items-center rounded-full bg-teal-500 px-2.5 py-0.5 text-xs font-semibold text-white">
                   Most popular
                 </span>
               )}
@@ -151,7 +166,13 @@ export default function PricingPage() {
               )}
 
               <p
-                className={`mt-2 text-sm ${plan.highlighted ? 'text-stone-300' : 'text-stone-500 dark:text-stone-400'}`}
+                className={`mt-2 text-sm ${
+                  plan.id === 'top'
+                    ? 'font-semibold text-teal-600 dark:text-teal-400'
+                    : plan.highlighted
+                      ? 'text-stone-300'
+                      : 'text-stone-500 dark:text-stone-400'
+                }`}
               >
                 {plan.staffLine}
               </p>
@@ -162,7 +183,7 @@ export default function PricingPage() {
                   <li key={feature} className="flex items-center gap-1.5">
                     <Check
                       size={14}
-                      className={plan.highlighted ? 'text-amber-400' : 'text-emerald-600 dark:text-emerald-400'}
+                      className={plan.highlighted ? 'text-teal-400' : 'text-emerald-600 dark:text-emerald-400'}
                     />
                     {feature}
                   </li>
@@ -172,7 +193,7 @@ export default function PricingPage() {
                 to="/register"
                 className={`mt-4 rounded-xl px-4 py-2.5 text-center font-medium transition-colors ${
                   plan.highlighted
-                    ? 'bg-amber-500 text-white hover:bg-amber-600'
+                    ? 'bg-teal-500 text-white hover:bg-teal-600'
                     : 'bg-stone-800 text-white hover:bg-stone-700 dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-white'
                 }`}
               >

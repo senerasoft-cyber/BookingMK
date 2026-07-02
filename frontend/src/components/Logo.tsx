@@ -19,7 +19,7 @@ export function Logo({
         inverted ? 'text-white' : 'text-stone-900 dark:text-stone-50'
       } ${className}`}
     >
-      buk<span className="text-amber-500">ano</span>
+      buk<span className="text-teal-600 dark:text-teal-400">ano</span>
     </span>
   )
 }
