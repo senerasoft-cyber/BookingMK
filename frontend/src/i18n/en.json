@@ -454,7 +454,12 @@
       "changePin": "Change PIN",
       "removePin": "Remove PIN",
       "pin": "PIN",
-      "confirmPin": "Confirm PIN"
+      "confirmPin": "Confirm PIN",
+      "changePassword": "Change password",
+      "changePasswordHint": "Changes your login password for this account and signs out any other active sessions.",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "passwordChanged": "Password changed"
     },
     "billing": {
       "title": "Billing",

@@ -454,7 +454,12 @@
       "changePin": "Промени PIN",
       "removePin": "Отстрани PIN",
       "pin": "PIN",
-      "confirmPin": "Потврди PIN"
+      "confirmPin": "Потврди PIN",
+      "changePassword": "Промени лозинка",
+      "changePasswordHint": "Ја менува лозинката за најава на оваа сметка и одјавува секоја друга активна сесија.",
+      "currentPassword": "Тековна лозинка",
+      "newPassword": "Нова лозинка",
+      "passwordChanged": "Лозинката е променета"
     },
     "billing": {
       "title": "Наплата",

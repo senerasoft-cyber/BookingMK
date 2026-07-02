@@ -59,6 +59,12 @@ class User(db.Model):
     email_verify_code_hash = db.Column(db.String(255), nullable=True)
     email_verify_expires_at = db.Column(db.DateTime(timezone=True), nullable=True)
     email_verify_attempts = db.Column(db.Integer, nullable=False, default=0)
+    # Bumped whenever existing sessions should be invalidated (currently: on
+    # password reset). Embedded in every access/refresh JWT as "tv" and checked
+    # on every request, so a stolen refresh token stops working immediately
+    # once the real owner resets their password, instead of staying valid
+    # until it naturally expires.
+    token_version = db.Column(db.Integer, nullable=False, default=0)
     created_at = db.Column(db.DateTime(timezone=True), default=utcnow, nullable=False)
 
     business = db.relationship(

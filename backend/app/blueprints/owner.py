@@ -3,7 +3,13 @@ from datetime import datetime, timedelta
 from flask import Blueprint, g, jsonify, request
 from sqlalchemy.exc import IntegrityError
 
-from app.auth import hash_password, jwt_required, verify_password
+from app.auth import (
+    create_access_token,
+    create_refresh_token,
+    hash_password,
+    jwt_required,
+    verify_password,
+)
 from app.billing import TrialError, get_billing_provider, start_trial
 from app.business_types import BUSINESS_TYPES_BY_ID
 from app.email_sender import get_email_sender
@@ -36,6 +42,7 @@ from app.schemas import (
     AppointmentMoveSchema,
     BusinessUpdateSchema,
     ClientCreateSchema,
+    PasswordChangeSchema,
     PromoRedeemSchema,
     ServiceCreateSchema,
     ServiceUpdateSchema,
@@ -47,7 +54,9 @@ from app.schemas import (
     SubscriptionCheckoutSchema,
     VoucherGrantSchema,
     WorkingHoursUpdateSchema,
+    is_common_password,
     parse,
+    password_contains,
 )
 from app.vouchers import client_booking_count, grant_voucher
 
@@ -285,6 +294,48 @@ def update_business():
 
     db.session.commit()
     return jsonify(serialize_business(business))
+
+
+@owner_bp.patch("/me/password")
+@jwt_required
+def change_password():
+    """Self-service password change from inside the dashboard, for an owner who
+    already knows their current password -- separate from the logged-out
+    forgot-password email flow in app/blueprints/auth.py. Bumps token_version
+    the same way a reset does, so any other/stolen session is logged out too;
+    returns fresh tokens so the session making this request keeps working.
+    """
+    payload, errors = parse(PasswordChangeSchema, request.get_json(silent=True) or {})
+    if errors:
+        return jsonify({"errors": errors}), 400
+
+    user = g.current_user
+    if not verify_password(user.password_hash, payload.current_password):
+        return jsonify({"errors": {"current_password": "Current password is incorrect"}}), 400
+
+    if is_common_password(payload.new_password):
+        return jsonify(
+            {
+                "errors": {
+                    "new_password": "That password is too common -- please choose something less predictable."
+                }
+            }
+        ), 400
+    if password_contains(payload.new_password, user.email.split("@")[0]):
+        return jsonify(
+            {"errors": {"new_password": "Your password shouldn't contain your email address."}}
+        ), 400
+
+    user.password_hash = hash_password(payload.new_password)
+    user.token_version += 1
+    db.session.commit()
+
+    return jsonify(
+        {
+            "access_token": create_access_token(user),
+            "refresh_token": create_refresh_token(user),
+        }
+    )
 
 
 @owner_bp.patch("/me/pin")

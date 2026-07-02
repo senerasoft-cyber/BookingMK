@@ -82,6 +82,11 @@ class PasswordResetConfirmSchema(BaseModel):
     new_password: str = Field(min_length=MIN_PASSWORD_LENGTH, max_length=MAX_PASSWORD_LENGTH)
 
 
+class PasswordChangeSchema(BaseModel):
+    current_password: str
+    new_password: str = Field(min_length=MIN_PASSWORD_LENGTH, max_length=MAX_PASSWORD_LENGTH)
+
+
 class BusinessUpdateSchema(BaseModel):
     name: Optional[str] = Field(default=None, min_length=1, max_length=255)
     slug: Optional[str] = Field(default=None, pattern=r"^[a-z0-9]+(-[a-z0-9]+)*$", max_length=255)

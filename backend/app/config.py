@@ -11,10 +11,13 @@ INSTANCE_DIR = BASE_DIR / "instance"
 INSTANCE_DIR.mkdir(exist_ok=True)
 
 
+INSECURE_JWT_SECRET_DEFAULT = "dev-insecure-secret-change-me"
+
+
 class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", f"sqlite:///{INSTANCE_DIR / 'dev.db'}")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    JWT_SECRET = os.environ.get("JWT_SECRET", "dev-insecure-secret-change-me")
+    JWT_SECRET = os.environ.get("JWT_SECRET", INSECURE_JWT_SECRET_DEFAULT)
     JWT_ACCESS_TTL_MINUTES = int(os.environ.get("JWT_ACCESS_TTL_MINUTES", "15"))
     JWT_REFRESH_TTL_DAYS = int(os.environ.get("JWT_REFRESH_TTL_DAYS", "30"))
     CORS_ORIGINS = os.environ.get("CORS_ORIGINS", "http://localhost:5173").split(",")
@@ -83,6 +86,15 @@ class ProdConfig(Config):
 
 def get_config():
     env = os.environ.get("FLASK_ENV", "development")
-    return {"development": DevConfig, "testing": TestConfig, "production": ProdConfig}.get(
+    config_cls = {"development": DevConfig, "testing": TestConfig, "production": ProdConfig}.get(
         env, DevConfig
     )
+    if config_cls is ProdConfig and config_cls.JWT_SECRET == INSECURE_JWT_SECRET_DEFAULT:
+        # Same fail-loudly principle as billing.get_billing_provider(): don't let a
+        # forgotten env var silently sign every JWT with a secret that's sitting in
+        # the public repo's .env.example.
+        raise RuntimeError(
+            "JWT_SECRET is not set outside of dev/test. Refusing to start in production "
+            "with the default insecure signing key."
+        )
+    return config_cls

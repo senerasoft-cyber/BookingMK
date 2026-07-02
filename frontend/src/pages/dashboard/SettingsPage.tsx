@@ -8,6 +8,7 @@ import { TextInput } from '../../components/TextInput'
 import { BOOKING_MODES } from '../../constants/bookingOptions'
 import { useAuth } from '../../context/AuthContext'
 import { ApiError, apiGet, apiPatch, apiPost } from '../../lib/api'
+import { setTokens } from '../../lib/tokens'
 import type { Business, BookingMode, Staff } from '../../types'
 import type { DashboardContext } from './DashboardLayout'
 
@@ -130,6 +131,99 @@ function MyPinSection() {
           </button>
           {error && <p className="w-full text-sm text-red-600 dark:text-red-400">{error}</p>}
         </div>
+      )}
+    </div>
+  )
+}
+
+function ChangePasswordSection() {
+  const { t } = useTranslation()
+  const [editing, setEditing] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [saved, setSaved] = useState(false)
+  const [busy, setBusy] = useState(false)
+
+  const submit = async () => {
+    setError(null)
+    setBusy(true)
+    try {
+      const data = await apiPatch<{ access_token: string; refresh_token: string }>(
+        '/me/password',
+        { current_password: currentPassword, new_password: newPassword },
+        true,
+      )
+      setTokens(data.access_token, data.refresh_token)
+      setCurrentPassword('')
+      setNewPassword('')
+      setEditing(false)
+      setSaved(true)
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : t('common.somethingWentWrong'))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="rounded-xl border border-stone-200 p-4 dark:border-stone-700">
+      <h3 className="text-sm font-semibold text-stone-700 dark:text-stone-300">
+        {t('dashboard.settings.changePassword')}
+      </h3>
+      <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
+        {t('dashboard.settings.changePasswordHint')}
+      </p>
+
+      {!editing ? (
+        <button
+          type="button"
+          onClick={() => {
+            setEditing(true)
+            setSaved(false)
+          }}
+          className="mt-2 text-sm font-medium text-stone-600 underline dark:text-stone-300"
+        >
+          {t('dashboard.settings.changePassword')}
+        </button>
+      ) : (
+        <div className="mt-3 flex max-w-xs flex-col gap-2">
+          <TextInput
+            label={t('dashboard.settings.currentPassword')}
+            type="password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+          />
+          <TextInput
+            label={t('dashboard.settings.newPassword')}
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={submit}
+              disabled={busy || !currentPassword || newPassword.length < 10}
+              className="rounded-lg bg-stone-800 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50 dark:bg-stone-700 dark:hover:bg-stone-600"
+            >
+              {t('dashboard.settings.save')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditing(false)}
+              className="rounded-lg px-3 py-1.5 text-sm font-medium text-stone-500 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
+            >
+              {t('public.datetime.back')}
+            </button>
+          </div>
+          {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+        </div>
+      )}
+      {saved && !editing && (
+        <p className="mt-2 text-sm text-emerald-600 dark:text-emerald-400">
+          {t('dashboard.settings.passwordChanged')}
+        </p>
       )}
     </div>
   )
@@ -370,6 +464,7 @@ export default function SettingsPage() {
           )}
         </div>
 
+        <ChangePasswordSection />
         <MyPinSection />
       </div>
     </div>

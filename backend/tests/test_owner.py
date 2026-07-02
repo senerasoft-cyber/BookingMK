@@ -1,9 +1,81 @@
-from tests.conftest import auth_headers, register_business
+from tests.conftest import DEFAULT_TEST_PASSWORD, auth_headers, register_business
 
 
 def test_get_business_requires_auth(client):
     response = client.get("/me/business")
     assert response.status_code == 401
+
+
+def test_change_password_requires_correct_current_password(client):
+    data = register_business(client)
+    headers = auth_headers(data["access_token"])
+
+    response = client.patch(
+        "/me/password",
+        headers=headers,
+        json={"current_password": "wrong-password", "new_password": "a-new-strong-pass1"},
+    )
+    assert response.status_code == 400
+    assert "current_password" in response.get_json()["errors"]
+
+
+def test_change_password_rejects_weak_new_password(client):
+    data = register_business(client)
+    headers = auth_headers(data["access_token"])
+
+    response = client.patch(
+        "/me/password",
+        headers=headers,
+        json={"current_password": DEFAULT_TEST_PASSWORD, "new_password": "password123"},
+    )
+    assert response.status_code == 400
+    assert "new_password" in response.get_json()["errors"]
+
+
+def test_change_password_succeeds_and_logs_in_with_new_password(client):
+    data = register_business(client)
+    headers = auth_headers(data["access_token"])
+
+    response = client.patch(
+        "/me/password",
+        headers=headers,
+        json={"current_password": DEFAULT_TEST_PASSWORD, "new_password": "a-new-strong-pass1"},
+    )
+    assert response.status_code == 200
+    new_tokens = response.get_json()
+    assert "access_token" in new_tokens
+    assert "refresh_token" in new_tokens
+
+    login = client.post(
+        "/auth/login",
+        json={"email": "owner@example.com", "password": "a-new-strong-pass1"},
+    )
+    assert login.status_code == 200
+
+    old_login = client.post(
+        "/auth/login",
+        json={"email": "owner@example.com", "password": DEFAULT_TEST_PASSWORD},
+    )
+    assert old_login.status_code == 401
+
+
+def test_change_password_invalidates_old_tokens(client):
+    data = register_business(client)
+    old_headers = auth_headers(data["access_token"])
+
+    change = client.patch(
+        "/me/password",
+        headers=old_headers,
+        json={"current_password": DEFAULT_TEST_PASSWORD, "new_password": "a-new-strong-pass1"},
+    )
+    assert change.status_code == 200
+
+    stale = client.get("/me/business", headers=old_headers)
+    assert stale.status_code == 401
+
+    new_headers = auth_headers(change.get_json()["access_token"])
+    fresh = client.get("/me/business", headers=new_headers)
+    assert fresh.status_code == 200
 
 
 def test_patch_business_sets_type_and_prefills_services(client):

@@ -50,8 +50,8 @@ def _tokens_response(user: User, status: int = 200):
     return (
         jsonify(
             {
-                "access_token": create_access_token(user.id),
-                "refresh_token": create_refresh_token(user.id),
+                "access_token": create_access_token(user),
+                "refresh_token": create_refresh_token(user),
                 "business": {
                     "id": user.business.id,
                     "name": user.business.name,
@@ -230,8 +230,10 @@ def refresh():
     user = db.session.get(User, claims["sub"])
     if user is None:
         return jsonify({"error": "invalid_token"}), 401
+    if claims.get("tv", 0) != user.token_version:
+        return jsonify({"error": "invalid_token"}), 401
 
-    return jsonify({"access_token": create_access_token(user.id)})
+    return jsonify({"access_token": create_access_token(user)})
 
 
 @auth_bp.post("/password-reset/request")
@@ -285,5 +287,8 @@ def password_reset_confirm():
     user.password_hash = hash_password(payload.new_password)
     user.login_attempts = 0
     user.login_locked_until = None
+    # Invalidate any access/refresh tokens issued before this reset -- otherwise
+    # a token stolen before the reset would keep working until it expires.
+    user.token_version += 1
     db.session.commit()
     return jsonify({"message": "Password updated."})

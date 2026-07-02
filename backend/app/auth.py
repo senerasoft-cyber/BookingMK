@@ -23,25 +23,26 @@ def verify_password(password_hash: str, password: str) -> bool:
         return False
 
 
-def _encode_token(user_id: int, token_type: str, ttl: timedelta) -> str:
+def _encode_token(user_id: int, token_type: str, ttl: timedelta, token_version: int) -> str:
     now = datetime.now(timezone.utc)
     payload = {
         "sub": user_id,
         "type": token_type,
+        "tv": token_version,
         "iat": now,
         "exp": now + ttl,
     }
     return jwt.encode(payload, current_app.config["JWT_SECRET"], algorithm="HS256")
 
 
-def create_access_token(user_id: int) -> str:
+def create_access_token(user: User) -> str:
     ttl = timedelta(minutes=current_app.config["JWT_ACCESS_TTL_MINUTES"])
-    return _encode_token(user_id, "access", ttl)
+    return _encode_token(user.id, "access", ttl, user.token_version)
 
 
-def create_refresh_token(user_id: int) -> str:
+def create_refresh_token(user: User) -> str:
     ttl = timedelta(days=current_app.config["JWT_REFRESH_TTL_DAYS"])
-    return _encode_token(user_id, "refresh", ttl)
+    return _encode_token(user.id, "refresh", ttl, user.token_version)
 
 
 def decode_token(token: str, expected_type: str) -> dict:
@@ -160,6 +161,8 @@ def jwt_required(fn):
         user = db.session.get(User, payload["sub"])
         if user is None or user.business is None:
             return jsonify({"error": "business_not_found"}), 404
+        if payload.get("tv", 0) != user.token_version:
+            return jsonify({"error": "invalid_token"}), 401
 
         g.current_user = user
         g.current_business = user.business
