@@ -213,29 +213,31 @@ export default function StudioPage() {
           )}
         </div>
 
-        <div className="mt-6 flex flex-wrap justify-center gap-1.5">
-          {NAV_ITEMS.map((item) => {
-            const Icon = item.icon
-            return (
-              <button
-                key={item.key}
-                type="button"
-                onClick={() => setView(item.key)}
-                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                  view === item.key
-                    ? `${accent.main} ${accent.mainText} shadow-sm`
-                    : 'bg-white text-stone-500 ring-1 ring-stone-200 hover:bg-stone-50 dark:bg-stone-900 dark:text-stone-400 dark:ring-stone-800 dark:hover:bg-stone-800'
-                }`}
-              >
-                <Icon size={15} />
-                {t(item.labelKey)}
-              </button>
-            )
-          })}
+        <div className="mt-5 flex justify-center">
+          <div className="inline-flex flex-wrap justify-center gap-0.5 rounded-2xl bg-stone-100 p-1.5 shadow-inner dark:bg-stone-800/80">
+            {NAV_ITEMS.map((item) => {
+              const Icon = item.icon
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => setView(item.key)}
+                  className={`inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-medium transition-all ${
+                    view === item.key
+                      ? 'bg-white text-stone-900 shadow-sm dark:bg-stone-900 dark:text-stone-50'
+                      : 'text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-stone-200'
+                  }`}
+                >
+                  <Icon size={14} />
+                  {t(item.labelKey)}
+                </button>
+              )
+            })}
+          </div>
         </div>
 
-        <div className="relative mt-4 overflow-hidden rounded-3xl bg-white p-6 text-left shadow-lg shadow-stone-200/60 ring-1 ring-stone-100 dark:bg-stone-900 dark:shadow-none dark:ring-stone-800 sm:p-8">
-          <div className={`absolute inset-x-0 top-0 h-1.5 ${accent.main}`} />
+        <div className="relative mt-4 overflow-hidden rounded-3xl bg-white p-6 text-left shadow-xl shadow-stone-200/50 ring-1 ring-stone-100 dark:bg-stone-900 dark:shadow-none dark:ring-stone-700 sm:p-8">
+          <div className={`absolute inset-x-0 top-0 h-1 ${accent.main} opacity-80`} />
 
           {view === 'pricing' && (
             <div>
