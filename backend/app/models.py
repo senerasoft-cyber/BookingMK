@@ -122,6 +122,7 @@ class Business(db.Model):
     # and never cleared again -- the guard against re-triggering a trial by
     # cancelling/downgrading back to "none".
     trial_started_at = db.Column(db.DateTime(timezone=True), nullable=True)
+    billing_interval = db.Column(db.String(10), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), default=utcnow, nullable=False)
     # Public page content -- all optional and shown only when set, so there's
     # no separate "enabled" toggle per section: clearing the field/list is how

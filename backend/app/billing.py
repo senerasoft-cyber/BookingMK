@@ -17,10 +17,11 @@ PADDLE_SANDBOX_API_BASE = "https://sandbox-api.paddle.com"
 
 class BillingProvider(ABC):
     @abstractmethod
-    def create_checkout(self, business, plan_id: str) -> dict:
-        """Starts a subscription for `business` on `plan_id`. Returns a dict the
-        frontend can act on -- real providers include a `checkout_url` to
-        redirect to; the dev stub activates immediately and returns none."""
+    def create_checkout(self, business, plan_id: str, interval: str = "monthly") -> dict:
+        """Starts a subscription for `business` on `plan_id` / `interval`.
+        Returns a dict the frontend can act on -- real providers include a
+        `checkout_url` to redirect to; the dev stub activates immediately and
+        returns none. `interval` is 'monthly' or 'yearly'."""
 
     @abstractmethod
     def cancel_subscription(self, business) -> None: ...
@@ -33,15 +34,16 @@ class StubBillingProvider(BillingProvider):
     without a real Paddle account.
     """
 
-    def create_checkout(self, business, plan_id: str) -> dict:
+    def create_checkout(self, business, plan_id: str, interval: str = "monthly") -> dict:
         business.plan_id = plan_id
+        business.billing_interval = interval
         business.subscription_status = "active"
         business.subscription_provider = "stub"
         business.subscription_customer_id = (
             business.subscription_customer_id or f"stub-{business.id}"
         )
-        business.subscription_id = f"stub-sub-{business.id}-{plan_id}"
-        business.current_period_end = utcnow() + timedelta(days=30)
+        business.subscription_id = f"stub-sub-{business.id}-{plan_id}-{interval}"
+        business.current_period_end = utcnow() + timedelta(days=365 if interval == "yearly" else 30)
         return {"checkout_url": None}
 
     def cancel_subscription(self, business) -> None:
@@ -67,19 +69,25 @@ class PaddleBillingProvider(BillingProvider):
     def _headers(self) -> dict:
         return {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
 
-    def create_checkout(self, business, plan_id: str) -> dict:
-        price_id = self.price_ids.get(plan_id)
+    def create_checkout(self, business, plan_id: str, interval: str = "monthly") -> dict:
+        price_key = f"{plan_id}_{interval}"
+        price_id = self.price_ids.get(price_key)
         if not price_id:
-            raise ValueError(f"No Paddle price id configured for plan '{plan_id}'")
+            raise ValueError(f"No Paddle price id configured for '{price_key}'")
 
         # Paddle Billing: a "transaction" in `ready`/draft status can be used to
         # drive Paddle.js's hosted overlay checkout on the frontend.
+        business.billing_interval = interval
         response = requests.post(
             f"{self._base_url}/transactions",
             headers=self._headers(),
             json={
                 "items": [{"price_id": price_id, "quantity": 1}],
-                "custom_data": {"business_id": business.id, "plan_id": plan_id},
+                "custom_data": {
+                    "business_id": business.id,
+                    "plan_id": plan_id,
+                    "interval": interval,
+                },
             },
             timeout=10,
         )

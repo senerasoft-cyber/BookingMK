@@ -148,6 +148,9 @@
     "billing": {
       "title": "Choose your plan",
       "subtitle": "Start a free trial or pick a plan to start taking real bookings.",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "yearlyBadge": "2 months free",
       "perMonth": "/mo",
       "unlimitedStaff": "Unlimited staff",
       "maxStaff": "Up to {{count}} staff member",
@@ -221,6 +224,7 @@
     },
     "staff": {
       "title": "Choose your specialist",
+      "subtitle": "Select who you'd like to book with",
       "select": "Select"
     },
     "datetime": {
@@ -459,6 +463,10 @@
       "promoEndsOn": "free trial ends {{date}}",
       "trialEndsOn": "free trial ends {{date}}",
       "cancel": "Cancel subscription",
+      "interval": {
+        "monthly": "Monthly billing",
+        "yearly": "Annual billing"
+      },
       "promoCode": "Promo code",
       "promoRedeem": "Redeem",
       "status": {

@@ -151,6 +151,7 @@ def serialize_business(business):
         "trial_started_at": (
             business.trial_started_at.isoformat() if business.trial_started_at else None
         ),
+        "billing_interval": business.billing_interval or "monthly",
         "onboarding_step": business.onboarding_step,
         "onboarding_completed_at": (
             business.onboarding_completed_at.isoformat()
@@ -355,7 +356,7 @@ def create_subscription_checkout():
         # staff you already have, not the staff-creation endpoint itself.
         return jsonify({"error": "plan_too_small_for_existing_staff"}), 400
 
-    checkout = get_billing_provider().create_checkout(business, payload.plan_id)
+    checkout = get_billing_provider().create_checkout(business, payload.plan_id, payload.interval)
     db.session.commit()
     return jsonify({"business": serialize_business(business), **checkout})
 

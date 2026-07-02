@@ -46,9 +46,12 @@ class Config:
     PADDLE_WEBHOOK_SECRET = os.environ.get("PADDLE_WEBHOOK_SECRET", "")
     PADDLE_SANDBOX = os.environ.get("PADDLE_SANDBOX", "true").lower() == "true"
     PADDLE_PRICE_IDS = {
-        "basic": os.environ.get("PADDLE_PRICE_ID_BASIC", ""),
-        "mid": os.environ.get("PADDLE_PRICE_ID_MID", ""),
-        "top": os.environ.get("PADDLE_PRICE_ID_TOP", ""),
+        "basic_monthly": os.environ.get("PADDLE_PRICE_ID_BASIC_MONTHLY", ""),
+        "basic_yearly": os.environ.get("PADDLE_PRICE_ID_BASIC_YEARLY", ""),
+        "mid_monthly": os.environ.get("PADDLE_PRICE_ID_MID_MONTHLY", ""),
+        "mid_yearly": os.environ.get("PADDLE_PRICE_ID_MID_YEARLY", ""),
+        "top_monthly": os.environ.get("PADDLE_PRICE_ID_TOP_MONTHLY", ""),
+        "top_yearly": os.environ.get("PADDLE_PRICE_ID_TOP_YEARLY", ""),
     }
 
     # Email. Leave SMTP_HOST unset in dev: email_sender.py falls back to a stub

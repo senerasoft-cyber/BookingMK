@@ -258,12 +258,20 @@ class AppointmentCancelSchema(BaseModel):
 
 class SubscriptionCheckoutSchema(BaseModel):
     plan_id: str
+    interval: str = "monthly"
 
     @field_validator("plan_id")
     @classmethod
     def plan_id_must_exist(cls, value):
         if value not in PLANS_BY_ID:
             raise ValueError(f"Unknown plan: {value}")
+        return value
+
+    @field_validator("interval")
+    @classmethod
+    def interval_must_be_valid(cls, value):
+        if value not in ("monthly", "yearly"):
+            raise ValueError("interval must be 'monthly' or 'yearly'")
         return value
 
 

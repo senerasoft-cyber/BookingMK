@@ -18,24 +18,41 @@ export default function PrivacyPage() {
         our payment processor (Paddle) — we never see or store your card details ourselves.
       </p>
       <p>
-        <strong>From end clients booking an appointment:</strong> name and phone number, supplied by
-        the client to the business they're booking with, used only to manage that booking and send
-        related messages (confirmations, reminders, verification codes).
+        <strong>From end clients booking an appointment:</strong> name, email address, and
+        optionally a phone number, supplied by the client to the business they're booking with,
+        used only to manage that booking and send related email confirmations and reminders.
       </p>
 
       <h2 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">2. How we use it</h2>
       <p>
         To operate the booking platform: creating accounts, managing appointments, sending
-        booking-related SMS/WhatsApp/Viber messages, processing subscription payments, and providing
-        support. We don't sell personal data, and we don't use it for advertising.
+        booking-related emails (confirmations, reminders, verification codes), processing
+        subscription payments, and providing support. We don't sell personal data, and we don't use
+        it for advertising.
       </p>
 
       <h2 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">3. Who we share it with</h2>
       <p>
-        We share data only with the service providers needed to run the platform: our messaging
-        provider (Twilio, for SMS/WhatsApp delivery) and our payment processor (Paddle, for billing
-        business owners). These providers process data on our behalf under their own data protection
-        terms — we don't share data with anyone else, and never sell it.
+        We share data only with the service providers needed to run the platform:
+      </p>
+      <ul className="list-disc pl-5">
+        <li>
+          <strong>SendGrid (Twilio)</strong> — our email delivery provider, used to send
+          booking confirmations, reminders, and verification codes.
+        </li>
+        <li>
+          <strong>Paddle</strong> — our payment processor and merchant of record, for billing
+          business owners.
+        </li>
+        <li>
+          <strong>Cloudflare</strong> — we use Cloudflare Turnstile on the registration form
+          to detect automated abuse. Cloudflare processes your IP address and browser signals
+          for this purpose under their own privacy policy.
+        </li>
+      </ul>
+      <p>
+        These providers process data on our behalf under their own data protection terms. We don't
+        share data with anyone else, and never sell it.
       </p>
 
       <h2 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">4. Data retention</h2>

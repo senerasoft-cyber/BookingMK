@@ -15,9 +15,9 @@ export default function TermsPage() {
       <h2 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">1. The service</h2>
       <p>
         Bukano lets a business ("Owner") set up a public booking page, manage staff, services,
-        working hours, and appointments, and send booking-related messages (SMS, WhatsApp, or
-        Viber) to their own clients. End clients book appointments through an Owner's public page
-        free of charge — only the Owner is billed.
+        working hours, and appointments, and send booking-related email messages (confirmations,
+        reminders, verification codes) to their own clients. End clients book appointments through
+        an Owner's public page free of charge — only the Owner is billed.
       </p>
 
       <h2 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">2. Accounts</h2>

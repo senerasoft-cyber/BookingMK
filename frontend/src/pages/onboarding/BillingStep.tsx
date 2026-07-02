@@ -37,6 +37,8 @@ export default function BillingStep() {
   const { t } = useTranslation()
   const { business, refreshBusiness } = useAuth()
   const navigate = useNavigate()
+  const [interval, setInterval] = useState<'monthly' | 'yearly'>('monthly')
+  const isYearly = interval === 'yearly'
   const [busyPlan, setBusyPlan] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [promoCode, setPromoCode] = useState('')
@@ -83,7 +85,7 @@ export default function BillingStep() {
     try {
       const result = await apiPost<{ business: unknown; checkout_url?: string | null }>(
         '/me/subscription/checkout',
-        { plan_id: planId },
+        { plan_id: planId, interval },
         true,
       )
       if (result.checkout_url) {
@@ -133,16 +135,57 @@ export default function BillingStep() {
         </p>
       )}
 
+      {/* interval toggle */}
+      <div className="mt-3 inline-flex items-center gap-1 rounded-xl bg-stone-200 p-1 dark:bg-stone-800">
+        <button
+          type="button"
+          onClick={() => setInterval('monthly')}
+          className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
+            !isYearly
+              ? 'bg-white text-stone-900 shadow-sm dark:bg-stone-900 dark:text-stone-50'
+              : 'text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200'
+          }`}
+        >
+          {t('onboarding.billing.monthly')}
+        </button>
+        <button
+          type="button"
+          onClick={() => setInterval('yearly')}
+          className={`flex items-center gap-1.5 rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
+            isYearly
+              ? 'bg-white text-stone-900 shadow-sm dark:bg-stone-900 dark:text-stone-50'
+              : 'text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200'
+          }`}
+        >
+          {t('onboarding.billing.yearly')}
+          <span className="rounded-full bg-emerald-100 px-1.5 py-0.5 text-xs font-semibold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400">
+            {t('onboarding.billing.yearlyBadge')}
+          </span>
+        </button>
+      </div>
+
       <div className="mt-3 grid gap-4 sm:grid-cols-3">
         {plans?.map((plan) => (
           <div key={plan.id} className="flex flex-col rounded-2xl border border-stone-200 p-4 dark:border-stone-700">
             <h3 className="font-display text-lg font-semibold text-stone-900 dark:text-stone-50">{plan.name}</h3>
-            <p className="mt-1 text-2xl font-semibold text-stone-900 dark:text-stone-50">
-              €{plan.price_eur_monthly}
-              <span className="text-sm font-normal text-stone-500 dark:text-stone-400">
-                {t('onboarding.billing.perMonth')}
-              </span>
-            </p>
+            {isYearly ? (
+              <div className="mt-1">
+                <p className="text-2xl font-semibold text-stone-900 dark:text-stone-50">
+                  €{plan.price_eur_yearly}
+                  <span className="text-sm font-normal text-stone-500 dark:text-stone-400">/yr</span>
+                </p>
+                <p className="text-xs text-stone-400 dark:text-stone-500">
+                  €{Math.round(plan.price_eur_yearly / 12)}/mo · saves €{plan.price_eur_monthly * 2}
+                </p>
+              </div>
+            ) : (
+              <p className="mt-1 text-2xl font-semibold text-stone-900 dark:text-stone-50">
+                €{plan.price_eur_monthly}
+                <span className="text-sm font-normal text-stone-500 dark:text-stone-400">
+                  {t('onboarding.billing.perMonth')}
+                </span>
+              </p>
+            )}
             <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
               {plan.max_staff === null
                 ? t('onboarding.billing.unlimitedStaff')

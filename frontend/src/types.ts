@@ -36,6 +36,7 @@ export interface Business {
   subscription_provider: string | null
   current_period_end: string | null
   trial_started_at: string | null
+  billing_interval: 'monthly' | 'yearly'
   onboarding_step: number
   onboarding_completed_at: string | null
 }
@@ -48,6 +49,7 @@ export interface Plan {
   name: string
   max_staff: number | null
   price_eur_monthly: number
+  price_eur_yearly: number
   real_channels: boolean
   branding: boolean
   auto_notify: boolean
