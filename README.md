@@ -393,8 +393,10 @@ people:
 1. Sign up at **https://www.paddle.com** and create a sandbox account first (there's a toggle
    between sandbox and live in the Paddle dashboard — stay in sandbox until you've tested a full
    checkout end-to-end).
-2. In the sandbox dashboard, create **one Product + Price per plan** (Basic/Mid/Top) — note each
-   Price's ID (looks like `pri_...`).
+2. In the sandbox dashboard, create **one Product per plan** (Basic/Mid/Top), then **two Prices on
+   each product** — one Monthly, one Yearly — matching `app/plans.py`'s `price_eur_monthly` /
+   `price_eur_yearly` in EUR (currently Basic €9/€90, Mid €19/€190, Top €39/€390). That's 3
+   products and 6 prices total. Note each Price's ID (looks like `pri_...`).
 3. Get your sandbox **API key** (Developer Tools → Authentication) and your **webhook secret**
    (Developer Tools → Notifications → create a destination pointed at
    `https://<your-domain>/webhooks/paddle`, then copy its signing secret).
@@ -403,9 +405,12 @@ people:
    PADDLE_API_KEY=<your sandbox API key>
    PADDLE_WEBHOOK_SECRET=<your webhook signing secret>
    PADDLE_SANDBOX=true
-   PADDLE_PRICE_ID_BASIC=<price id for Basic>
-   PADDLE_PRICE_ID_MID=<price id for Mid>
-   PADDLE_PRICE_ID_TOP=<price id for Top>
+   PADDLE_PRICE_ID_BASIC_MONTHLY=<price id for Basic Monthly>
+   PADDLE_PRICE_ID_BASIC_YEARLY=<price id for Basic Yearly>
+   PADDLE_PRICE_ID_MID_MONTHLY=<price id for Mid Monthly>
+   PADDLE_PRICE_ID_MID_YEARLY=<price id for Mid Yearly>
+   PADDLE_PRICE_ID_TOP_MONTHLY=<price id for Top Monthly>
+   PADDLE_PRICE_ID_TOP_YEARLY=<price id for Top Yearly>
    ```
 5. Restart the backend — `get_billing_provider()` now returns `PaddleBillingProvider` instead of
    the stub. Subscribe to a plan from the app using one of

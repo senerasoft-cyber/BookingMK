@@ -75,8 +75,9 @@ class PaddleBillingProvider(BillingProvider):
         if not price_id:
             raise ValueError(f"No Paddle price id configured for '{price_key}'")
 
-        # Paddle Billing: a "transaction" in `ready`/draft status can be used to
-        # drive Paddle.js's hosted overlay checkout on the frontend.
+        # Paddle Billing: creating a transaction returns a Paddle-hosted checkout
+        # URL at data.checkout.url (requires a default payment link configured
+        # in Checkout settings) -- the frontend redirects the browser there.
         business.billing_interval = interval
         response = requests.post(
             f"{self._base_url}/transactions",
@@ -93,7 +94,8 @@ class PaddleBillingProvider(BillingProvider):
         )
         response.raise_for_status()
         data = response.json()["data"]
-        return {"checkout_url": None, "transaction_id": data.get("id")}
+        checkout_url = (data.get("checkout") or {}).get("url")
+        return {"checkout_url": checkout_url, "transaction_id": data.get("id")}
 
     def cancel_subscription(self, business) -> None:
         if not business.subscription_id:
