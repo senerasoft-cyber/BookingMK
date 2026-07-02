@@ -5,16 +5,11 @@ import { useTranslation } from 'react-i18next'
 
 import { Button } from '../../components/Button'
 import { TextInput } from '../../components/TextInput'
+import { BASELINE_PLAN_FEATURE_KEYS, PLAN_FEATURE_KEYS } from '../../constants/planFeatures'
 import { useAuth } from '../../context/AuthContext'
 import { ApiError, apiGet, apiPost } from '../../lib/api'
 import { openPaddleCheckout } from '../../lib/paddle'
 import type { Plan } from '../../types'
-
-const FEATURE_KEYS: { key: keyof Plan; labelKey: string }[] = [
-  { key: 'stats', labelKey: 'onboarding.billing.featureStats' },
-  { key: 'marketing_tools', labelKey: 'onboarding.billing.featureMarketingTools' },
-  { key: 'white_label', labelKey: 'onboarding.billing.featureWhiteLabel' },
-]
 
 const STATUS_BADGE: Record<string, string> = {
   active: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400',
@@ -217,7 +212,7 @@ export default function BillingPage() {
             key={plan.id}
             className={`flex flex-col rounded-2xl p-4 shadow-sm transition-shadow ${
               isCurrent
-                ? 'border-2 border-teal-500 bg-white dark:border-teal-500 dark:bg-stone-900'
+                ? 'border-2 border-teal-600 bg-white dark:border-teal-600 dark:bg-stone-900'
                 : 'border border-stone-200 bg-white hover:shadow-md dark:border-stone-800 dark:bg-stone-900'
             }`}
           >
@@ -245,13 +240,23 @@ export default function BillingPage() {
                 </span>
               </p>
             )}
-            <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
+            <p
+              className={`mt-2 text-sm ${
+                plan.max_staff === null ? 'font-semibold text-teal-700 dark:text-teal-400' : 'text-stone-500 dark:text-stone-400'
+              }`}
+            >
               {plan.max_staff === null
                 ? t('onboarding.billing.unlimitedStaff')
                 : t('onboarding.billing.maxStaff', { count: plan.max_staff })}
             </p>
             <ul className="mt-3 flex flex-col gap-1.5 text-sm text-stone-600 dark:text-stone-300">
-              {FEATURE_KEYS.map(({ key, labelKey }) =>
+              {BASELINE_PLAN_FEATURE_KEYS.map((labelKey) => (
+                <li key={labelKey} className="flex items-center gap-1.5">
+                  <Check size={14} className="text-emerald-600 dark:text-emerald-400" />
+                  {t(labelKey)}
+                </li>
+              ))}
+              {PLAN_FEATURE_KEYS.map(({ key, labelKey }) =>
                 plan[key] ? (
                   <li key={key} className="flex items-center gap-1.5">
                     <Check size={14} className="text-emerald-600 dark:text-emerald-400" />

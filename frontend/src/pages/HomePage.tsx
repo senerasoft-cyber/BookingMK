@@ -19,7 +19,7 @@ function NavBar() {
         <ThemeToggle />
         <Link
           to="/register"
-          className="rounded-xl bg-teal-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-700"
+          className="rounded-xl bg-teal-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-800"
         >
           Get started
         </Link>
@@ -29,7 +29,7 @@ function NavBar() {
         <Link to="/login" className="text-sm text-stone-600 dark:text-stone-400">
           Sign in
         </Link>
-        <Link to="/register" className="rounded-xl bg-teal-600 px-3 py-1.5 text-sm font-medium text-white">
+        <Link to="/register" className="rounded-xl bg-teal-700 px-3 py-1.5 text-sm font-medium text-white">
           Get started
         </Link>
       </div>
@@ -42,7 +42,7 @@ function BookingMockup() {
     <div className="relative mx-auto max-w-xs">
       <div className="w-72 rounded-2xl border border-stone-100 bg-white p-5 shadow-2xl dark:border-stone-800 dark:bg-stone-900 dark:shadow-black/40">
         <div className="mb-5 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-100 text-sm font-bold text-teal-600 dark:bg-teal-900/40 dark:text-teal-300">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-100 text-sm font-bold text-teal-700 dark:bg-teal-900/40 dark:text-teal-300">
             H
           </div>
           <div>
@@ -63,7 +63,7 @@ function BookingMockup() {
               key={i}
               className={`rounded-lg py-1.5 text-xs font-medium transition-colors ${
                 i === 2
-                  ? 'bg-teal-600 text-white'
+                  ? 'bg-teal-700 text-white'
                   : i === 5 || i === 6
                   ? 'cursor-default text-stone-300 dark:text-stone-600'
                   : 'text-stone-700 hover:bg-stone-100 dark:text-stone-300 dark:hover:bg-stone-800'
@@ -80,7 +80,7 @@ function BookingMockup() {
               key={i}
               className={`rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
                 i === 1
-                  ? 'border-teal-600 bg-teal-50 text-teal-600 dark:bg-teal-950/40 dark:text-teal-300'
+                  ? 'border-teal-700 bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-300'
                   : 'border-stone-200 text-stone-600 hover:border-stone-300 dark:border-stone-700 dark:text-stone-400'
               }`}
             >
@@ -89,7 +89,7 @@ function BookingMockup() {
           ))}
         </div>
 
-        <button className="w-full rounded-xl bg-teal-600 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-700">
+        <button className="w-full rounded-xl bg-teal-700 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-800">
           Confirm booking
         </button>
       </div>
@@ -167,8 +167,8 @@ export default function HomePage() {
       {/* Hero */}
       <section className="mx-auto flex max-w-6xl flex-col items-center gap-12 px-6 pb-20 pt-16 lg:flex-row lg:gap-16">
         <div className="flex-1 text-center lg:text-left">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-teal-100 bg-teal-50 px-3 py-1 text-xs font-medium text-teal-700 dark:border-teal-900/50 dark:bg-teal-950/30 dark:text-teal-300">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-teal-500"></span>
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-teal-100 bg-teal-50 px-3 py-1 text-xs font-medium text-teal-800 dark:border-teal-900/50 dark:bg-teal-950/30 dark:text-teal-300">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-teal-600"></span>
             Online booking for service businesses
           </div>
           <h1 className="text-4xl font-bold leading-tight text-stone-900 dark:text-stone-50 sm:text-5xl lg:text-6xl">
@@ -176,7 +176,7 @@ export default function HomePage() {
             <br />
             clients to
             <br />
-            <span className="text-teal-600 dark:text-teal-400">missed calls</span>
+            <span className="text-teal-700 dark:text-teal-400">missed calls</span>
           </h1>
           <p className="mx-auto mt-5 max-w-lg text-lg text-stone-500 dark:text-stone-400 lg:mx-0">
             Bukano gives your business a booking page clients can use 24/7 — with automatic confirmations, email reminders, and a dashboard that keeps you in control.
@@ -184,7 +184,7 @@ export default function HomePage() {
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
             <Link
               to="/register"
-              className="rounded-xl bg-teal-600 px-6 py-3 text-center text-base font-semibold text-white transition-colors hover:bg-teal-700"
+              className="rounded-xl bg-teal-700 px-6 py-3 text-center text-base font-semibold text-white transition-colors hover:bg-teal-800"
             >
               Get started
             </Link>
@@ -214,7 +214,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {features.map((f, i) => (
               <div key={i} className="rounded-2xl border border-stone-100 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-teal-50 text-teal-600 dark:bg-teal-950/40 dark:text-teal-400">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400">
                   {f.icon}
                 </div>
                 <h3 className="mb-2 font-semibold text-stone-900 dark:text-stone-50">{f.title}</h3>
@@ -245,20 +245,20 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-teal-700 py-20 dark:bg-teal-800">
+      <section className="bg-teal-800 py-20 dark:bg-teal-900">
         <div className="mx-auto max-w-2xl px-6 text-center">
           <h2 className="mb-4 text-3xl font-bold text-white">Ready to fill your calendar?</h2>
-          <p className="mb-8 text-teal-100">Plans start at €9/month. Set up your booking page in minutes.</p>
+          <p className="mb-8 text-teal-200">Plans start at €9/month. Set up your booking page in minutes.</p>
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Link
               to="/register"
-              className="rounded-xl bg-white px-6 py-3 text-base font-semibold text-teal-700 transition-colors hover:bg-teal-50"
+              className="rounded-xl bg-white px-6 py-3 text-base font-semibold text-teal-800 transition-colors hover:bg-teal-50"
             >
               Create account
             </Link>
             <Link
               to="/login"
-              className="rounded-xl border border-teal-300 px-6 py-3 text-base font-medium text-white transition-colors hover:bg-teal-600"
+              className="rounded-xl border border-teal-400 px-6 py-3 text-base font-medium text-white transition-colors hover:bg-teal-700"
             >
               Sign in
             </Link>

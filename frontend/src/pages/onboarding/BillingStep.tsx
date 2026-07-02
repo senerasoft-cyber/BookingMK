@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { ApiError, apiGet, apiPost } from '../../lib/api'
 import { useAuth } from '../../context/AuthContext'
+import { BASELINE_PLAN_FEATURE_KEYS, PLAN_FEATURE_KEYS } from '../../constants/planFeatures'
 import { advanceOnboarding } from '../../lib/onboarding'
 import { openPaddleCheckout } from '../../lib/paddle'
 import type { Plan } from '../../types'
@@ -27,12 +28,6 @@ function trialErrorMessage(t: (key: string) => string, err: unknown): string {
   }
   return t('common.somethingWentWrong')
 }
-
-const FEATURE_KEYS: { key: keyof Plan; labelKey: string }[] = [
-  { key: 'stats', labelKey: 'onboarding.billing.featureStats' },
-  { key: 'marketing_tools', labelKey: 'onboarding.billing.featureMarketingTools' },
-  { key: 'white_label', labelKey: 'onboarding.billing.featureWhiteLabel' },
-]
 
 export default function BillingStep() {
   const { t } = useTranslation()
@@ -191,13 +186,23 @@ export default function BillingStep() {
                 </span>
               </p>
             )}
-            <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
+            <p
+              className={`mt-2 text-sm ${
+                plan.max_staff === null ? 'font-semibold text-teal-700 dark:text-teal-400' : 'text-stone-500 dark:text-stone-400'
+              }`}
+            >
               {plan.max_staff === null
                 ? t('onboarding.billing.unlimitedStaff')
                 : t('onboarding.billing.maxStaff', { count: plan.max_staff })}
             </p>
             <ul className="mt-3 flex flex-col gap-1.5 text-sm text-stone-600 dark:text-stone-300">
-              {FEATURE_KEYS.map(({ key, labelKey }) =>
+              {BASELINE_PLAN_FEATURE_KEYS.map((labelKey) => (
+                <li key={labelKey} className="flex items-center gap-1.5">
+                  <Check size={14} className="text-emerald-600 dark:text-emerald-400" />
+                  {t(labelKey)}
+                </li>
+              ))}
+              {PLAN_FEATURE_KEYS.map(({ key, labelKey }) =>
                 plan[key] ? (
                   <li key={key} className="flex items-center gap-1.5">
                     <Check size={14} className="text-emerald-600 dark:text-emerald-400" />

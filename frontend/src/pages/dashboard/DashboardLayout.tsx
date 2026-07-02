@@ -4,6 +4,8 @@ import {
   CalendarDays,
   Clock,
   CreditCard,
+  ExternalLink,
+  Globe,
   LogOut,
   Palette,
   ScissorsLineDashed,
@@ -268,9 +270,11 @@ export default function DashboardLayout() {
               href={publicUrl}
               target="_blank"
               rel="noreferrer"
-              className="rounded-xl px-3 py-2 text-sm font-medium text-stone-600 hover:bg-white dark:text-stone-300 dark:hover:bg-stone-800/60"
+              className={`mb-1 flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition hover:opacity-90 ${accent.soft} ${accent.softText}`}
             >
-              {t('dashboard.nav.viewPublicPage')}
+              <Globe size={16} className="shrink-0" />
+              <span className="flex-1 truncate">{t('dashboard.nav.viewPublicPage')}</span>
+              <ExternalLink size={14} className="shrink-0" />
             </a>
             <button
               type="button"

@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
+import { Bell, Building2, CalendarClock, Globe, ShieldCheck, Tag, type LucideIcon } from 'lucide-react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useOutletContext } from 'react-router-dom'
 
@@ -11,6 +12,31 @@ import { ApiError, apiGet, apiPatch, apiPost } from '../../lib/api'
 import { setTokens } from '../../lib/tokens'
 import type { Business, BookingMode, Staff } from '../../types'
 import type { DashboardContext } from './DashboardLayout'
+
+function SettingsSection({
+  icon: Icon,
+  title,
+  description,
+  children,
+}: {
+  icon: LucideIcon
+  title: string
+  description?: string
+  children: ReactNode
+}) {
+  return (
+    <section>
+      <div className="mb-2 flex items-center gap-2">
+        <Icon size={16} className="text-stone-400 dark:text-stone-500" />
+        <h2 className="font-display text-sm font-semibold text-stone-700 dark:text-stone-200">{title}</h2>
+      </div>
+      {description && <p className="mb-3 text-xs text-stone-400 dark:text-stone-500">{description}</p>}
+      <div className="flex flex-col gap-4 rounded-2xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-900">
+        {children}
+      </div>
+    </section>
+  )
+}
 
 function MyPinSection() {
   const { t } = useTranslation()
@@ -30,7 +56,7 @@ function MyPinSection() {
 
   if (!activeStaffId || !activeStaff) {
     return (
-      <div className="rounded-xl border border-stone-200 p-4 dark:border-stone-700">
+      <div className="border-t border-stone-200 pt-4 first:border-t-0 first:pt-0 dark:border-stone-800">
         <h3 className="text-sm font-semibold text-stone-700 dark:text-stone-300">{t('dashboard.settings.myPin')}</h3>
         <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">{t('dashboard.settings.myPinSwitchHint')}</p>
       </div>
@@ -64,7 +90,7 @@ function MyPinSection() {
   }
 
   return (
-    <div className="rounded-xl border border-stone-200 p-4 dark:border-stone-700">
+    <div className="border-t border-stone-200 pt-4 first:border-t-0 first:pt-0 dark:border-stone-800">
       <h3 className="text-sm font-semibold text-stone-700 dark:text-stone-300">
         {t('dashboard.settings.myPin')} — {activeStaff.name}
       </h3>
@@ -167,7 +193,7 @@ function ChangePasswordSection() {
   }
 
   return (
-    <div className="rounded-xl border border-stone-200 p-4 dark:border-stone-700">
+    <div className="border-t border-stone-200 pt-4 first:border-t-0 first:pt-0 dark:border-stone-800">
       <h3 className="text-sm font-semibold text-stone-700 dark:text-stone-300">
         {t('dashboard.settings.changePassword')}
       </h3>
@@ -275,6 +301,14 @@ export default function SettingsPage() {
     }
   }
 
+  const reminderHours = Math.floor(form.reminder_lead_minutes / 60)
+  const reminderMinutes = form.reminder_lead_minutes % 60
+  const updateReminderLead = (hours: number, minutes: number) => {
+    const safeHours = Number.isFinite(hours) ? Math.max(0, hours) : 0
+    const safeMinutes = Number.isFinite(minutes) ? Math.max(0, Math.min(59, minutes)) : 0
+    update('reminder_lead_minutes', safeHours * 60 + safeMinutes)
+  }
+
   return (
     <div>
       <h1 className="font-display text-xl font-semibold text-stone-900 dark:text-stone-50">
@@ -282,190 +316,227 @@ export default function SettingsPage() {
       </h1>
       <p className="mt-1 text-stone-500 dark:text-stone-400">{t('dashboard.settings.subtitle')}</p>
 
-      <div className="mt-6 grid max-w-xl gap-4">
-        <TextInput
-          label={t('dashboard.settings.businessName')}
-          value={form.name}
-          onChange={(e) => update('name', e.target.value)}
-        />
-        <TextInput
-          label={t('dashboard.settings.slug')}
-          value={form.slug}
-          onChange={(e) => update('slug', e.target.value)}
-        />
-        <p className="text-xs text-stone-400 dark:text-stone-500">
-          {t('dashboard.settings.slugHint', { slug: form.slug })}
-        </p>
-        <TextInput
-          label={t('dashboard.settings.currency')}
-          value={form.currency}
-          onChange={(e) => update('currency', e.target.value)}
-        />
-
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
-            {t('dashboard.settings.locale')}
-          </span>
-          <select
-            value={form.locale_default}
-            onChange={(e) => update('locale_default', e.target.value)}
-            className="rounded-xl border border-stone-200 px-4 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:focus:border-stone-500 dark:focus:ring-stone-700"
-          >
-            <option value="mk">Македонски</option>
-            <option value="en">English</option>
-          </select>
-        </label>
-
-        <div className="flex flex-col gap-2">
-          {BOOKING_MODES.map((mode) => (
-            <label
-              key={mode.value}
-              className={`flex cursor-pointer flex-col rounded-xl border p-3 ${
-                form.booking_mode === mode.value
-                  ? 'border-stone-400 bg-stone-50 dark:border-stone-500 dark:bg-stone-900/40'
-                  : 'border-stone-200 dark:border-stone-700'
-              }`}
-            >
-              <span className="flex items-center gap-2 font-medium text-stone-800 dark:text-stone-200">
-                <input
-                  type="radio"
-                  checked={form.booking_mode === mode.value}
-                  onChange={() => update('booking_mode', mode.value)}
-                />
-                {t(mode.labelKey)}
-              </span>
-              <span className="ml-6 text-sm text-stone-500 dark:text-stone-400">{t(mode.descriptionKey)}</span>
-            </label>
-          ))}
-        </div>
-
-        <label className="flex items-center gap-2 text-sm font-medium text-stone-700 dark:text-stone-300">
-          <input
-            type="checkbox"
-            checked={form.require_verification}
-            onChange={(e) => update('require_verification', e.target.checked)}
-          />
-          {t('onboarding.mode.requireVerification')}
-        </label>
-        <p className="text-xs text-stone-400 dark:text-stone-500">{t('onboarding.mode.requireVerificationHint')}</p>
-
-        <label className="flex items-center gap-2 text-sm font-medium text-stone-700 dark:text-stone-300">
-          <input
-            type="checkbox"
-            checked={form.collect_phone}
-            onChange={(e) => update('collect_phone', e.target.checked)}
-          />
-          {t('onboarding.mode.collectPhone')}
-        </label>
-        <p className="text-xs text-stone-400 dark:text-stone-500">{t('onboarding.mode.collectPhoneHint')}</p>
-
-        <label className="flex items-center gap-2 text-sm font-medium text-stone-700 dark:text-stone-300">
-          <input
-            type="checkbox"
-            checked={form.reminders_enabled}
-            onChange={(e) => update('reminders_enabled', e.target.checked)}
-          />
-          {t('dashboard.settings.remindersEnabled')}
-        </label>
-
-        {form.reminders_enabled && (
+      <div className="mt-6 flex max-w-2xl flex-col gap-6">
+        <SettingsSection icon={Building2} title={t('dashboard.settings.sectionBusiness')}>
           <TextInput
-            label={t('dashboard.settings.reminderLeadMinutes')}
-            type="number"
-            value={form.reminder_lead_minutes}
-            onChange={(e) => update('reminder_lead_minutes', Number(e.target.value))}
+            label={t('dashboard.settings.businessName')}
+            value={form.name}
+            onChange={(e) => update('name', e.target.value)}
           />
-        )}
-
-        <h2 className="mt-4 font-medium text-stone-700 dark:text-stone-300">{t('dashboard.settings.publicPage')}</h2>
-        <p className="text-xs text-stone-400 dark:text-stone-500">{t('dashboard.settings.publicPageHint')}</p>
-        <TextInput
-          label={t('dashboard.settings.address')}
-          value={form.address}
-          onChange={(e) => update('address', e.target.value)}
-        />
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
-            {t('dashboard.settings.aboutText')}
-          </span>
-          <textarea
-            value={form.about_text}
-            onChange={(e) => update('about_text', e.target.value)}
-            rows={4}
-            className="rounded-xl border border-stone-200 px-4 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:focus:border-stone-500 dark:focus:ring-stone-700"
+          <div>
+            <TextInput
+              label={t('dashboard.settings.slug')}
+              value={form.slug}
+              onChange={(e) => update('slug', e.target.value)}
+            />
+            <p className="mt-1.5 text-xs text-stone-400 dark:text-stone-500">
+              {t('dashboard.settings.slugHint', { slug: form.slug })}
+            </p>
+          </div>
+          <TextInput
+            label={t('dashboard.settings.currency')}
+            value={form.currency}
+            onChange={(e) => update('currency', e.target.value)}
           />
-        </label>
-        <TextInput
-          label={t('dashboard.settings.contactPhone')}
-          placeholder="+389 70 123 456"
-          value={form.contact_phone}
-          onChange={(e) => update('contact_phone', e.target.value)}
-        />
-        <TextInput
-          label={t('dashboard.settings.instagramUrl')}
-          placeholder="https://instagram.com/yourbusiness"
-          value={form.instagram_url}
-          onChange={(e) => update('instagram_url', e.target.value)}
-        />
-        <TextInput
-          label={t('dashboard.settings.facebookUrl')}
-          placeholder="https://facebook.com/yourbusiness"
-          value={form.facebook_url}
-          onChange={(e) => update('facebook_url', e.target.value)}
-        />
-        <TextInput
-          label={t('dashboard.settings.websiteUrl')}
-          placeholder="https://yourbusiness.com"
-          value={form.website_url}
-          onChange={(e) => update('website_url', e.target.value)}
-        />
+          <label className="flex flex-col gap-1.5">
+            <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
+              {t('dashboard.settings.locale')}
+            </span>
+            <select
+              value={form.locale_default}
+              onChange={(e) => update('locale_default', e.target.value)}
+              className="rounded-xl border border-stone-200 px-4 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:focus:border-stone-500 dark:focus:ring-stone-700"
+            >
+              <option value="mk">Македонски</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+        </SettingsSection>
 
-        <h2 className="mt-4 font-medium text-stone-700 dark:text-stone-300">{t('dashboard.settings.marketing')}</h2>
-        <p className="text-xs text-stone-400 dark:text-stone-500">{t('dashboard.settings.marketingHint')}</p>
-        <label className="flex items-center gap-2 text-sm font-medium text-stone-700 dark:text-stone-300">
-          <input
-            type="checkbox"
-            checked={form.marketing_enabled}
-            onChange={(e) => update('marketing_enabled', e.target.checked)}
-          />
-          {t('dashboard.settings.marketingEnabled')}
-        </label>
+        <SettingsSection icon={CalendarClock} title={t('dashboard.settings.sectionBooking')}>
+          <div className="flex flex-col gap-2">
+            {BOOKING_MODES.map((mode) => (
+              <label
+                key={mode.value}
+                className={`flex cursor-pointer flex-col rounded-xl border p-3 ${
+                  form.booking_mode === mode.value
+                    ? 'border-stone-400 bg-stone-50 dark:border-stone-500 dark:bg-stone-900/40'
+                    : 'border-stone-200 dark:border-stone-700'
+                }`}
+              >
+                <span className="flex items-center gap-2 font-medium text-stone-800 dark:text-stone-200">
+                  <input
+                    type="radio"
+                    checked={form.booking_mode === mode.value}
+                    onChange={() => update('booking_mode', mode.value)}
+                  />
+                  {t(mode.labelKey)}
+                </span>
+                <span className="ml-6 text-sm text-stone-500 dark:text-stone-400">{t(mode.descriptionKey)}</span>
+              </label>
+            ))}
+          </div>
 
-        {form.marketing_enabled && (
-          <>
+          <div>
             <label className="flex items-center gap-2 text-sm font-medium text-stone-700 dark:text-stone-300">
               <input
                 type="checkbox"
-                checked={form.loyalty_enabled}
-                onChange={(e) => update('loyalty_enabled', e.target.checked)}
+                checked={form.require_verification}
+                onChange={(e) => update('require_verification', e.target.checked)}
               />
-              {t('dashboard.settings.loyaltyEnabled')}
+              {t('onboarding.mode.requireVerification')}
             </label>
-            {form.loyalty_enabled && (
-              <TextInput
-                label={t('dashboard.settings.loyaltyEveryN')}
-                type="number"
-                min={2}
-                max={100}
-                value={form.loyalty_every_n}
-                onChange={(e) => update('loyalty_every_n', Number(e.target.value))}
-              />
-            )}
-          </>
-        )}
+            <p className="mt-1 text-xs text-stone-400 dark:text-stone-500">
+              {t('onboarding.mode.requireVerificationHint')}
+            </p>
+          </div>
 
-        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
-        <div className="flex items-center gap-3">
+          <div>
+            <label className="flex items-center gap-2 text-sm font-medium text-stone-700 dark:text-stone-300">
+              <input
+                type="checkbox"
+                checked={form.collect_phone}
+                onChange={(e) => update('collect_phone', e.target.checked)}
+              />
+              {t('onboarding.mode.collectPhone')}
+            </label>
+            <p className="mt-1 text-xs text-stone-400 dark:text-stone-500">{t('onboarding.mode.collectPhoneHint')}</p>
+          </div>
+        </SettingsSection>
+
+        <SettingsSection icon={Bell} title={t('dashboard.settings.sectionReminders')}>
+          <label className="flex items-center gap-2 text-sm font-medium text-stone-700 dark:text-stone-300">
+            <input
+              type="checkbox"
+              checked={form.reminders_enabled}
+              onChange={(e) => update('reminders_enabled', e.target.checked)}
+            />
+            {t('dashboard.settings.remindersEnabled')}
+          </label>
+
+          {form.reminders_enabled && (
+            <div>
+              <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
+                {t('dashboard.settings.reminderLeadMinutes')}
+              </span>
+              <div className="mt-1.5 flex items-end gap-2">
+                <TextInput
+                  label={t('dashboard.settings.reminderLeadHoursLabel')}
+                  type="number"
+                  min={0}
+                  className="w-24"
+                  value={reminderHours}
+                  onChange={(e) => updateReminderLead(Number(e.target.value), reminderMinutes)}
+                />
+                <TextInput
+                  label={t('dashboard.settings.reminderLeadMinutesLabel')}
+                  type="number"
+                  min={0}
+                  max={59}
+                  className="w-24"
+                  value={reminderMinutes}
+                  onChange={(e) => updateReminderLead(reminderHours, Number(e.target.value))}
+                />
+              </div>
+              <p className="mt-1.5 text-xs text-stone-400 dark:text-stone-500">
+                {t('dashboard.settings.reminderLeadHint')}
+              </p>
+            </div>
+          )}
+        </SettingsSection>
+
+        <SettingsSection icon={Globe} title={t('dashboard.settings.publicPage')} description={t('dashboard.settings.publicPageHint')}>
+          <TextInput
+            label={t('dashboard.settings.address')}
+            value={form.address}
+            onChange={(e) => update('address', e.target.value)}
+          />
+          <label className="flex flex-col gap-1.5">
+            <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
+              {t('dashboard.settings.aboutText')}
+            </span>
+            <textarea
+              value={form.about_text}
+              onChange={(e) => update('about_text', e.target.value)}
+              rows={4}
+              className="rounded-xl border border-stone-200 px-4 py-2.5 outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:focus:border-stone-500 dark:focus:ring-stone-700"
+            />
+          </label>
+          <TextInput
+            label={t('dashboard.settings.contactPhone')}
+            placeholder="+389 70 123 456"
+            value={form.contact_phone}
+            onChange={(e) => update('contact_phone', e.target.value)}
+          />
+          <TextInput
+            label={t('dashboard.settings.instagramUrl')}
+            placeholder="https://instagram.com/yourbusiness"
+            value={form.instagram_url}
+            onChange={(e) => update('instagram_url', e.target.value)}
+          />
+          <TextInput
+            label={t('dashboard.settings.facebookUrl')}
+            placeholder="https://facebook.com/yourbusiness"
+            value={form.facebook_url}
+            onChange={(e) => update('facebook_url', e.target.value)}
+          />
+          <TextInput
+            label={t('dashboard.settings.websiteUrl')}
+            placeholder="https://yourbusiness.com"
+            value={form.website_url}
+            onChange={(e) => update('website_url', e.target.value)}
+          />
+        </SettingsSection>
+
+        <SettingsSection icon={Tag} title={t('dashboard.settings.marketing')} description={t('dashboard.settings.marketingHint')}>
+          <label className="flex items-center gap-2 text-sm font-medium text-stone-700 dark:text-stone-300">
+            <input
+              type="checkbox"
+              checked={form.marketing_enabled}
+              onChange={(e) => update('marketing_enabled', e.target.checked)}
+            />
+            {t('dashboard.settings.marketingEnabled')}
+          </label>
+
+          {form.marketing_enabled && (
+            <>
+              <label className="flex items-center gap-2 text-sm font-medium text-stone-700 dark:text-stone-300">
+                <input
+                  type="checkbox"
+                  checked={form.loyalty_enabled}
+                  onChange={(e) => update('loyalty_enabled', e.target.checked)}
+                />
+                {t('dashboard.settings.loyaltyEnabled')}
+              </label>
+              {form.loyalty_enabled && (
+                <TextInput
+                  label={t('dashboard.settings.loyaltyEveryN')}
+                  type="number"
+                  min={2}
+                  max={100}
+                  className="max-w-[10rem]"
+                  value={form.loyalty_every_n}
+                  onChange={(e) => update('loyalty_every_n', Number(e.target.value))}
+                />
+              )}
+            </>
+          )}
+        </SettingsSection>
+
+        <SettingsSection icon={ShieldCheck} title={t('dashboard.settings.sectionAccount')}>
+          <ChangePasswordSection />
+          <MyPinSection />
+        </SettingsSection>
+
+        <div className="flex items-center gap-3 rounded-2xl border border-stone-200 bg-white p-3 shadow-sm dark:border-stone-800 dark:bg-stone-900">
           <Button onClick={save} disabled={saving} accentKey={business?.accent_key}>
             {t('dashboard.settings.save')}
           </Button>
           {saved && (
             <span className="text-sm text-emerald-600 dark:text-emerald-400">{t('dashboard.settings.saved')}</span>
           )}
+          {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
         </div>
-
-        <ChangePasswordSection />
-        <MyPinSection />
       </div>
     </div>
   )

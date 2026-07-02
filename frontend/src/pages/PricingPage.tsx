@@ -119,12 +119,12 @@ export default function PricingPage() {
               key={plan.id}
               className={`flex flex-col rounded-2xl p-5 shadow-lg shadow-stone-200/60 dark:shadow-none ${
                 plan.highlighted
-                  ? 'bg-stone-900 text-white ring-2 ring-teal-500 dark:bg-stone-900 dark:ring-teal-500'
+                  ? 'bg-stone-900 text-white ring-2 ring-teal-600 dark:bg-stone-900 dark:ring-teal-600'
                   : 'bg-white text-stone-900 dark:bg-stone-900 dark:text-stone-50 dark:ring-1 dark:ring-stone-800'
               }`}
             >
               {plan.highlighted && (
-                <span className="mb-2 inline-flex w-fit items-center rounded-full bg-teal-500 px-2.5 py-0.5 text-xs font-semibold text-white">
+                <span className="mb-2 inline-flex w-fit items-center rounded-full bg-teal-600 px-2.5 py-0.5 text-xs font-semibold text-white">
                   Most popular
                 </span>
               )}
@@ -168,7 +168,7 @@ export default function PricingPage() {
               <p
                 className={`mt-2 text-sm ${
                   plan.id === 'top'
-                    ? 'font-semibold text-teal-600 dark:text-teal-400'
+                    ? 'font-semibold text-teal-700 dark:text-teal-400'
                     : plan.highlighted
                       ? 'text-stone-300'
                       : 'text-stone-500 dark:text-stone-400'
@@ -193,7 +193,7 @@ export default function PricingPage() {
                 to="/register"
                 className={`mt-4 rounded-xl px-4 py-2.5 text-center font-medium transition-colors ${
                   plan.highlighted
-                    ? 'bg-teal-500 text-white hover:bg-teal-600'
+                    ? 'bg-teal-600 text-white hover:bg-teal-700'
                     : 'bg-stone-800 text-white hover:bg-stone-700 dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-white'
                 }`}
               >
